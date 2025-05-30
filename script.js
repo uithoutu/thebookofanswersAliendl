@@ -9,7 +9,7 @@ const locationEl = document.getElementById("current-location");
 
 // 读取图片链接列表
 let imageUrls = [];
-fetch("texts/image_urls.txt")
+fetch("texts/image_urls.json")
   .then((response) => response.text())
   .then((text) => {
     imageUrls = text.trim().split("\n");
@@ -17,7 +17,7 @@ fetch("texts/image_urls.txt")
 
 // 获取文案内容（阿拉伯语文本）
 function fetchRandomText() {
-  return fetch("texts/arabic_texts.txt")
+  return fetch("texts/arabic_texts.json")
     .then((res) => res.text())
     .then((data) => {
       const lines = data.trim().split("\n");
