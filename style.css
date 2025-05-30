@@ -1,0 +1,146 @@
+/* 通用样式 */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: black;
+  font-family: 'Bodoni MT', serif;
+}
+
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Page 1 */
+#page1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+#orb {
+  width: 65vw;
+  max-width: 400px;
+}
+
+.loading-hint {
+  font-size: 4vw;
+  margin-top: 2vh;
+  opacity: 0;
+  animation: fadeIn 2s ease forwards;
+}
+
+.loading-hint:nth-child(2) {
+  animation-delay: 1s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+#loading-ring {
+  position: absolute;
+  width: 65vw;
+  max-width: 400px;
+  height: 65vw;
+  max-height: 400px;
+  border-radius: 50%;
+  border: 5px solid white;
+  clip-path: circle(50%);
+  transform: rotate(-90deg);
+  animation: progress 5s linear forwards;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+  100% {
+    stroke-dasharray: 100 0;
+  }
+}
+
+/* Page 2 */
+#page2 {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  padding: 2vh 5vw;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+#answer-box {
+  margin-top: 15vh;
+  font-family: 'Traditional Arabic', serif;
+  font-size: 6vw;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.8;
+  max-width: 90vw;
+  opacity: 0;
+  animation: fadeInAnswer 2s ease forwards;
+}
+
+@keyframes fadeInAnswer {
+  to {
+    opacity: 1;
+  }
+}
+
+#info-bar {
+  position: fixed;
+  bottom: 20vh;
+  width: 100%;
+  text-align: center;
+  font-size: 4vw;
+  font-family: 'Bodoni MT', serif;
+}
+
+#info-bar .frame {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.5em 1em;
+  margin: 0 0.5em;
+  border-radius: 10px;
+}
+
+#buttons {
+  position: fixed;
+  bottom: 4vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 5vw;
+}
+
+.button {
+  font-size: 4vw;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 1vh 2vw;
+  border-radius: 15px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#watermark {
+  position: absolute;
+  bottom: 12vh;
+  text-align: center;
+  font-size: 3vw;
+  font-family: 'Bodoni MT', italic;
+  color: rgba(255, 255, 255, 0.4);
+}
