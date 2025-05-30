@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Book of Answers - Aliendl</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Page 1: Loading Page -->
+  <div class="page" id="page1">
+    <img id="orb" src="assets/orb.png" alt="orb" />
+    <div id="loading-ring"></div>
+    <div class="loading-hint" id="hint1"></div>
+    <div class="loading-hint" id="hint2"></div>
+  </div>
+
+  <!-- Page 2: Answer Page -->
+  <div class="page" id="page2">
+    <div id="answer-box"></div>
+
+    <div id="info-bar">
+      <span class="frame" id="location"></span>
+      <span class="frame" id="time"></span>
+      <span class="frame" id="date"></span>
+    </div>
+
+    <div id="watermark">supported by <span style="font-weight: 400; font-style: normal; font-size: 4vw">Aliendl</span></div>
+
+    <div id="buttons">
+      <button class="button" id="download-btn">تحميل</button>
+      <button class="button" id="website-btn">الموقع</button>
+      <button class="button" id="retry-btn">إعادة</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
