@@ -1,39 +1,56 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Book of Answers - Aliendl</title>
+  <title>Aliendl - The Book of Answers</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Page 1: Loading Page -->
+  <!-- Page 1 -->
   <div class="page" id="page1">
     <img id="orb" src="assets/orb.png" alt="orb" />
-    <div id="loading-ring"></div>
     <div class="loading-hint" id="hint1"></div>
     <div class="loading-hint" id="hint2"></div>
+    <div id="loading-ring"></div>
   </div>
 
-  <!-- Page 2: Answer Page -->
+  <!-- Page 2 -->
   <div class="page" id="page2">
-    <div id="answer-box"></div>
+    <div id="answer-box">这里将显示一句阿拉伯语答案</div>
+    <img id="answer-image" src="" alt="Generated Image" style="width: 100%; max-height: 50vh; object-fit: contain;" />
 
     <div id="info-bar">
-      <span class="frame" id="location"></span>
-      <span class="frame" id="time"></span>
-      <span class="frame" id="date"></span>
+      <span class="frame" id="current-time">--:--</span>
+      <span class="frame" id="current-date">-- -- ----</span>
+      <span class="frame" id="current-location">--</span>
     </div>
-
-    <div id="watermark">supported by <span style="font-weight: 400; font-style: normal; font-size: 4vw">Aliendl</span></div>
 
     <div id="buttons">
-      <button class="button" id="download-btn">تحميل</button>
-      <button class="button" id="website-btn">الموقع</button>
-      <button class="button" id="retry-btn">إعادة</button>
+      <button class="button" id="download-button">下载</button>
+      <button class="button" id="visit-button">跳转官网</button>
+      <button class="button" id="regenerate-button">重新生成</button>
     </div>
+
+    <div id="watermark">@Aliendl</div>
   </div>
 
+  <script>
+    // 加载文案提示
+    fetch("texts/page1_hint.txt")
+      .then((res) => res.text())
+      .then((text) => {
+        const lines = text.trim().split("\n");
+        document.getElementById("hint1").textContent = lines[0] || "";
+        document.getElementById("hint2").textContent = lines[1] || "";
+      });
+
+    // 自动跳转
+    setTimeout(() => {
+      document.getElementById("page1").click();
+    }, 6000);
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
+
