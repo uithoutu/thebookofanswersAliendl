@@ -103,3 +103,28 @@ document.getElementById("download-button").addEventListener("click", downloadIma
 document.getElementById("visit-button").addEventListener("click", () => {
   window.open("https://aliendl.com", "_blank");
 });
+
+// 加载文案提示（逐行显现）
+fetch("texts/page1_hint.txt")
+  .then(res => res.text())
+  .then(text => {
+    const lines = text.trim().split("\n");
+    const hint1 = document.getElementById("hint1");
+    const hint2 = document.getElementById("hint2");
+
+    hint1.textContent = "";
+    hint2.textContent = "";
+
+    setTimeout(() => { hint1.textContent = lines[0] || ""; }, 1000);
+    setTimeout(() => { hint2.textContent = lines[1] || ""; }, 4000);
+  });
+
+// 加载完成后，允许点击跳转
+setTimeout(() => {
+  const page1 = document.getElementById("page1");
+  page1.addEventListener("click", () => {
+    document.getElementById("page1").style.display = "none";
+    document.getElementById("page2").style.display = "block";
+    // 你可以加淡入动画
+  });
+}, 8000);
