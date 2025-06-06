@@ -66,6 +66,18 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
+#loading-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 24vh;  /* 增加顶部空间，让文案整体下移 */
+  gap: 2vh;
+}
+
 #loading-ring {
   position: relative;
   width: 100px;
@@ -74,7 +86,7 @@ body {
   border-top: 6px solid white;
   border-radius: 50%;
   animation: spin 8s linear infinite;
-  margin: 60px auto 0;
+  margin: 20px auto 0;
   z-index: 3;
 }
 
