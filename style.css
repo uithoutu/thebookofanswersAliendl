@@ -72,15 +72,15 @@ body {
 
 #loading-ring {
   position: absolute;
-  top: 50%;  /* 垂直居中 */
-  left: 50%; /* 水平居中 */
-  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  margin: -50px 0 0 -50px; /* 上左分别是宽高的一半 */
   width: 100px;
   height: 100px;
   border: 6px solid rgba(255, 255, 255, 0.2);
   border-top: 6px solid white;
   border-radius: 50%;
-  animation: spin 8s linear infinite;
+  animation: spin 3s linear infinite;
   z-index: 3;
 }
 
