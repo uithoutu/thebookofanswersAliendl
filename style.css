@@ -70,42 +70,6 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-#loading-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -50px 0 0 -50px; /* 上左分别是宽高的一半 */
-  width: 100px;
-  height: 100px;
-  border: 6px solid rgba(255, 255, 255, 0.2);
-  border-top: 6px solid white;
-  border-radius: 50%;
-  animation: spin 3s linear infinite;
-  z-index: 3;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-#orb {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 90px;
-  height: 90px;
-  transform: translate(-50%, -50%);
-  z-index: 4;
-  animation: flicker 2s infinite ease-in-out;
-}
-
-@keyframes flicker {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 1; }
-}
-
 #loading-ring-wrapper {
   position: absolute;
   top: 38vh;
@@ -123,6 +87,27 @@ body {
   border-top: 6px solid white;
   border-radius: 50%;
   animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90px;
+  height: 90px;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  animation: flicker 2s infinite ease-in-out;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
 }
 
 /* Page 2 */
