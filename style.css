@@ -72,9 +72,9 @@ body {
 
 #loading-ring {
   position: absolute;
-  top: 38vh;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;  /* 垂直居中 */
+  left: 50%; /* 水平居中 */
+  transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
   border: 6px solid rgba(255, 255, 255, 0.2);
