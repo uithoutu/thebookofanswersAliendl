@@ -19,53 +19,42 @@
   <div class="loading-hint" id="hint1"></div>
   <div class="loading-hint" id="hint2"></div>
 
-  <!-- 加载环 -->
-<div id="loading-wrapper">
-  <div class="loading-hint" id="hint1"></div>
-  <div class="loading-hint" id="hint2"></div>
+  <!-- 加载环 + 水晶球 -->
   <div id="loading-ring"></div>
   <img id="orb" src="assets/orb.png" alt="orb" />
 </div>
 
-  <!-- 水晶球图像 -->
-  <img id="orb" src="assets/orb.png" alt="orb" />
-</div>
+<!-- Page 2 -->
+<div class="page" id="page2">
+  <div id="answer-box">这里将显示一句阿拉伯语答案</div>
+  <img id="answer-image" src="" alt="Generated Image" style="width: 100%; max-height: 50vh; object-fit: contain;" />
 
-  <!-- Page 2 -->
-  <div class="page" id="page2">
-    <div id="answer-box">这里将显示一句阿拉伯语答案</div>
-    <img id="answer-image" src="" alt="Generated Image" style="width: 100%; max-height: 50vh; object-fit: contain;" />
-
-    <div id="info-bar">
-      <span class="frame" id="current-time">--:--</span>
-      <span class="frame" id="current-date">-- -- ----</span>
-      <span class="frame" id="current-location">--</span>
-    </div>
-
-    <div id="buttons">
-      <button class="button" id="download-button">下载</button>
-      <button class="button" id="visit-button">跳转官网</button>
-      <button class="button" id="regenerate-button">重新生成</button>
-    </div>
-
-    <div id="watermark">@Aliendl</div>
+  <div id="info-bar">
+    <span class="frame" id="current-time">--:--</span>
+    <span class="frame" id="current-date">-- -- ----</span>
+    <span class="frame" id="current-location">--</span>
   </div>
 
-  <script>
-    // 加载文案提示
-    fetch("texts/page1_hint.txt")
-      .then((res) => res.text())
-      .then((text) => {
-        const lines = text.trim().split("\n");
-        document.getElementById("hint1").textContent = lines[0] || "";
-        document.getElementById("hint2").textContent = lines[1] || "";
-      });
+  <div id="buttons">
+    <button class="button" id="download-button">下载</button>
+    <button class="button" id="visit-button">跳转官网</button>
+    <button class="button" id="regenerate-button">重新生成</button>
+  </div>
 
-    // 自动跳转
-    setTimeout(() => {
-      document.getElementById("page1").click();
-    }, 6000);
-  </script>
-  <script src="script.js"></script>
+  <div id="watermark">@Aliendl</div>
+</div>
+
+<!-- 加载文案 -->
+<script>
+  fetch("texts/page1_hint.txt")
+    .then((res) => res.text())
+    .then((text) => {
+      const lines = text.trim().split("\n");
+      document.getElementById("hint1").textContent = lines[0] || "";
+      document.getElementById("hint2").textContent = lines[1] || "";
+    });
+</script>
+
+<script src="script.js"></script>
 </body>
 </html>
