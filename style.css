@@ -25,9 +25,7 @@ body {
   overflow: hidden;
 }
 
-/* Page 1 */
-/* page1 样式 */
-
+/* Page 1 样式 */
 #page1 {
   position: relative;
   width: 100vw;
@@ -45,19 +43,25 @@ body {
   z-index: 1;
 }
 
-.loading-hint {
+#loading-wrapper {
   position: relative;
   z-index: 3;
+  padding-top: 28vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3vh;
+}
+
+.loading-hint {
   font-family: 'Traditional Arabic', sans-serif;
   font-size: 40px;
   line-height: 50px;
   color: white;
   text-align: right;
-  text-shadow:
-    0 0 4px white;
+  text-shadow: 0 0 4px white;
   padding-right: 20px;
   max-width: 90%;
-  margin: 30px auto;
   animation: fadeInText 6s ease-in-out forwards;
 }
 
@@ -66,34 +70,17 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-#loading-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 24vh;  /* 增加顶部空间，让文案整体下移 */
-  gap: 2vh;
-}
-
 #loading-ring {
-  position: relative;
   width: 100px;
   height: 100px;
   border: 6px solid rgba(255, 255, 255, 0.2);
   border-top: 6px solid white;
   border-radius: 50%;
   animation: spin 8s linear infinite;
-  margin: 20px auto 0;
-  z-index: 3;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 #orb {
@@ -137,9 +124,7 @@ body {
 }
 
 @keyframes fadeInAnswer {
-  to {
-    opacity: 1;
-  }
+  to { opacity: 1; }
 }
 
 #info-bar {
