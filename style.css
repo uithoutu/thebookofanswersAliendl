@@ -72,7 +72,7 @@ body {
 
 #loading-ring-wrapper {
   position: absolute;
-  top: 50vh;
+  top: 60vh;
   left: 50%;
   transform: translateX(-50%);
   width: 100px;
