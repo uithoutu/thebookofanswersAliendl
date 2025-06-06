@@ -72,7 +72,7 @@ body {
 
 #loading-ring-wrapper {
   position: absolute;
-  top: 38vh;
+  top: 45vh;
   left: 50%;
   transform: translateX(-50%);
   width: 100px;
@@ -86,7 +86,7 @@ body {
   border: 6px solid rgba(255, 255, 255, 0.2);
   border-top: 6px solid white;
   border-radius: 50%;
-  animation: spin 3s linear infinite;
+  animation: spin 5s linear infinite;
 }
 
 @keyframes spin {
