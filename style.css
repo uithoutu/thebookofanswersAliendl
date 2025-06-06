@@ -70,9 +70,10 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
+/* 加载环容器，控制位置 */
 #loading-ring-wrapper {
   position: absolute;
-  top: 60vh;
+  top: 52vh;  /* 控制整体下移 */
   left: 50%;
   transform: translateX(-50%);
   width: 100px;
@@ -80,13 +81,14 @@ body {
   z-index: 3;
 }
 
+/* 加载环本体 */
 #loading-ring {
   width: 100%;
   height: 100%;
   border: 6px solid rgba(255, 255, 255, 0.2);
   border-top: 6px solid white;
   border-radius: 50%;
-  animation: spin 5s linear infinite;
+  animation: spin 3s linear infinite;
 }
 
 @keyframes spin {
@@ -94,6 +96,7 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+/* 水晶球 */
 #orb {
   position: absolute;
   top: 50%;
