@@ -74,7 +74,7 @@ body {
   border-top: 6px solid white;
   border-radius: 50%;
   animation: spin 8s linear infinite;
-  margin: 20px auto 0;
+  margin: 40px auto 0;
   z-index: 3;
 }
 
