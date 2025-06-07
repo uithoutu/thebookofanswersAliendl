@@ -82,20 +82,22 @@ body {
   height: 90px;
   transform: translate(-50%, -50%);
   z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ✅ 加载环样式 */
+/* ✅ loading ring 样式 */
 #loading-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 90px;
   height: 90px;
   border: 4px solid rgba(255, 255, 255, 0.2);
   border-top: 4px solid white;
   border-radius: 50%;
   animation: spin 3s linear infinite;
-  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 @keyframes spin {
@@ -105,11 +107,11 @@ body {
 
 /* 水晶球 */
 #orb {
+  width: 90px;
+  height: 90px;
   position: absolute;
   top: 0;
   left: 0;
-  width: 90px;
-  height: 90px;
   animation: flicker 2s infinite ease-in-out;
   z-index: 4;
 }
