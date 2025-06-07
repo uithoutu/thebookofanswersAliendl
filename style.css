@@ -73,7 +73,7 @@ body {
 /* 加载环容器，控制位置 */
 #loading-ring-wrapper {
   position: absolute;
-  top: 50vh;  /* 控制整体下移 */
+  top: 20vh;  /* 控制整体下移 */
   left: 50%;
   transform: translateX(-50%);
   width: 100px;
