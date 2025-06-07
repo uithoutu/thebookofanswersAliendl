@@ -73,27 +73,30 @@ body {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* 加载环容器，控制位置 */
-#loading-ring-wrapper {
+/* ✅ 居中容器：保证水平垂直精确居中 */
+#center-wrapper {
   position: absolute;
-  top: calc(50% + 6px); 
+  top: 50%;
   left: 50%;
-  width: 77px; /* 和水晶球保持一致 */
-  height: 77px;
+  width: 90px;
+  height: 90px;
   transform: translate(-50%, -50%);
   z-index: 3;
 }
 
-/* 加载环本体 */
+/* ✅ 加载环样式 */
 #loading-ring {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 90px;
   border: 4px solid rgba(255, 255, 255, 0.2);
   border-top: 4px solid white;
   border-radius: 50%;
   animation: spin 3s linear infinite;
+  z-index: 3;
 }
-
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
@@ -103,13 +106,12 @@ body {
 /* 水晶球 */
 #orb {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 77px;
-  height: 77px;
-  transform: translate(-50%, -50%);
-  z-index: 4;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 90px;
   animation: flicker 2s infinite ease-in-out;
+  z-index: 4;
 }
 
 @keyframes flicker {
