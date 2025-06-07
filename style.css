@@ -112,7 +112,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  transform: translate(-40%, -50%);
+  transform: translate(-50%, -50%) translateX(8px); 
   animation: flicker 2s infinite ease-in-out;
   z-index: 4;
 }
