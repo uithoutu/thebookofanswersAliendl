@@ -112,11 +112,15 @@ fetch("texts/page1_hint.txt")
     const hint1 = document.getElementById("hint1");
     const hint2 = document.getElementById("hint2");
 
-    hint1.textContent = "";
-    hint2.textContent = "";
+    // 1 秒后设置 hint1 的内容
+    setTimeout(() => {
+      hint1.textContent = lines[0] || "";
+    }, 1000);
 
-    setTimeout(() => { hint1.textContent = lines[0] || ""; }, 1000);
-    setTimeout(() => { hint2.textContent = lines[1] || ""; }, 4000);
+    // 4 秒后设置 hint2 的内容
+    setTimeout(() => {
+      hint2.textContent = lines[1] || "";
+    }, 4000);
   });
 
 // 加载完成后，允许点击跳转
