@@ -76,10 +76,10 @@ body {
 /* 加载环容器，控制位置 */
 #loading-ring-wrapper {
   position: absolute;
-  top: 50%;
+  top: calc(50% + 6px); 
   left: 50%;
-  width: 90px; /* 和水晶球保持一致 */
-  height: 90px;
+  width: 77px; /* 和水晶球保持一致 */
+  height: 77px;
   transform: translate(-50%, -50%);
   z-index: 3;
 }
@@ -105,8 +105,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 90px;
-  height: 90px;
+  width: 77px;
+  height: 77px;
   transform: translate(-50%, -50%);
   z-index: 4;
   animation: flicker 2s infinite ease-in-out;
