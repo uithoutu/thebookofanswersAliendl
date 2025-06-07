@@ -76,15 +76,14 @@ body {
 /* 加载环容器，控制位置 */
 #loading-ring-wrapper {
   position: absolute;
-  top: 30vh;  /* 控制整体下移 */
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
   z-index: 3;
 }
 
-/* 加载环本体 */
 #loading-ring {
   width: 100%;
   height: 100%;
@@ -93,6 +92,7 @@ body {
   border-radius: 50%;
   animation: spin 3s linear infinite;
 }
+
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
