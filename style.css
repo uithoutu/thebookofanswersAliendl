@@ -54,15 +54,18 @@ body {
   text-shadow: 0 0 4px white;
   right: 20px;
   width: calc(100% - 40px);
-  animation: fadeInText 6s ease-in-out forwards;
+  opacity: 0; /* 初始透明 */
+  animation: fadeInText 2s ease-in-out forwards;
 }
 
 #hint1 {
   top: 22vh;
+  animation-delay: 1s; /* 第一行延迟1秒 */
 }
 
 #hint2 {
   top: 28vh;
+  animation-delay: 4s; /* 第二行延迟4秒 */
 }
 
 @keyframes fadeInText {
