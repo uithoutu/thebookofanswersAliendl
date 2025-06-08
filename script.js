@@ -72,7 +72,7 @@ function showPage2() {
   // 随机背景
   if (imageUrls.length) {
     const url = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-    page2.style.backgroundImage = `url('${url}')`;
+document.getElementById("card").style.backgroundImage = `url('${url}')`;
   }
   // 随机答案
   if (arabicTexts.length) {
