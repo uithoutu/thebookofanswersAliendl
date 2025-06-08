@@ -102,31 +102,20 @@ body {
 #page2 {
   display: none;
   position: relative;
-  width: 100vw; height: 100vh;
+  width: 100vw; 
+  height: 100vh;
 }
 
 #card {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  /* ✅ 把背景图挂在这里 */
-  background-size: cover;
-  background-position: center;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: transparent;           /* 先清空灰色 */
+  background-size: cover;            /* 铺满 */
+  background-position: center;       /* 居中 */
   background-repeat: no-repeat;
-  background-color: transparent;
-  backdrop-filter: none;
-
-  /* 内边距：根据需要再微调 */
-  padding: 20vh 5vw 10vh;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  padding: 0;                        /* 内边距由绝对定位的子元素来控制 */
   box-sizing: border-box;
-  z-index: 2;
+  z-index: 1;
 }
 
 /* 顶部信息栏 */
@@ -137,7 +126,7 @@ body {
   transform: translateX(-50%);
   display: flex;
   gap: 1vw;
-  z-index: 3;
+  z-index: 2;
 }
 #info-bar .frame {
   display: inline-block;
@@ -178,7 +167,7 @@ body {
 /* 水印 */
 #watermark-img {
   position: absolute;
-  bottom: 10vh;
+  bottom: 14vh;
   right: 5vw;
   height: 2.5vh;
   opacity: 0.6;
@@ -189,7 +178,7 @@ body {
 #buttons {
   position: absolute;
   /* 距离卡片底部 5vh，可根据设计图再微调 */
-  bottom: 5vh;
+  bottom: 6vh;
   /* 水平居中 */
   left: 50%;
   transform: translateX(-50%);
@@ -199,7 +188,8 @@ body {
   z-index: 3;
 }
 .btn {
+  width: 8vw;
   max-width: 70px;
-  max-height: 70px;
+  height: auto;
   touch-action: manipulation;
 }
