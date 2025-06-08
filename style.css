@@ -167,7 +167,7 @@ body {
 /* 水印 */
 #watermark-img {
   position: absolute;
-  bottom: 14vh;
+  top: calc(15vh + 20vh + 3vh);
   right: 5vw;
   height: 2.5vh;
   opacity: 0.6;
@@ -178,7 +178,7 @@ body {
 #buttons {
   position: absolute;
   /* 距离卡片底部 5vh，可根据设计图再微调 */
-  bottom: 6vh;
+  bottom: 20vh;
   /* 水平居中 */
   left: 50%;
   transform: translateX(-50%);
