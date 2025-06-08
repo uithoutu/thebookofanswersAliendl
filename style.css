@@ -177,13 +177,13 @@ body {
 /* 按钮组 */
 #buttons {
   position: absolute;
-  bottom: 18vh;
+  bottom: 13vh;
   /* 水平居中 */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: space-around;
-  gap: 5vw;
+  gap: 7vw;
   z-index: 3;
 }
 .btn {
