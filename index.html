@@ -8,87 +8,56 @@
 </head>
 <body>
 
-<!-- Page 1 -->
-<div class="page" id="page1">
-  <!-- 背景视频 -->
-  <video id="intro-video" autoplay muted loop playsinline>
-    <source src="video/intro.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-
-  <!-- 提示文案 -->
-  <div class="loading-hint" id="hint1"></div>
-  <div class="loading-hint" id="hint2"></div>
-
-  <!-- ✅ loading-ring + orb 居中包裹容器 -->
-  <div id="center-wrapper">
-    <div id="loading-ring"></div>
-    <img id="orb" src="assets/orb.png" alt="orb" />
-  </div>
-</div>
-
-<!-- Page 2 -->
-<div class="page" id="page2">
-  <!-- 顶部信息栏 -->
-  <div id="info-bar">
-    <span class="frame"><span id="current-location">--</span></span>
-    <span class="frame"><span id="current-time">--:--</span></span>
-    <span class="frame"><span id="current-date">-- -- ----</span></span>
-  </div>
-
-  <!-- 半透明圆角卡片，承载文字、水印和按钮 -->
-  <div id="card">
-    <!-- 阿拉伯语答案 -->
-    <div id="answer-text"></div>
-
-    <!-- 水印 -->
-    <img
-      id="watermark-img"
-      src="assets/supported_by_aliendl.png"
-      alt="Supported by Aliendl"
-    />
-
-    <!-- 按钮组 -->
-    <div id="buttons">
-      <img
-        id="download-button"
-        class="btn"
-        src="assets/button-download.png"
-        data-pressed="assets/button-download-pressed.png"
-        alt="下载"
-      />
-      <img
-        id="regenerate-button"
-        class="btn"
-        src="assets/button-regenerate.png"
-        data-pressed="assets/button-regenerate-pressed.png"
-        alt="重新生成"
-      />
-      <img
-        id="visit-button"
-        class="btn"
-        src="assets/button-visit.png"
-        data-pressed="assets/button-visit-pressed.png"
-        alt="跳转官网"
-      />
+  <!-- Page 1 -->
+  <div class="page" id="page1">
+    <video id="intro-video" autoplay muted loop playsinline>
+      <source src="video/intro.mp4" type="video/mp4" />
+    </video>
+    <div class="loading-hint" id="hint1"></div>
+    <div class="loading-hint" id="hint2"></div>
+    <div id="center-wrapper">
+      <div id="loading-ring"></div>
+      <img id="orb" src="assets/orb.png" alt="orb" />
     </div>
   </div>
-</div>
-  
-<!-- 加载文案 -->
+
+  <!-- Page 2 -->
+  <div class="page" id="page2">
+    <div id="info-bar">
+      <span class="frame"><span id="current-location">--</span></span>
+      <span class="frame"><span id="current-time">--:--</span></span>
+      <span class="frame"><span id="current-date">-- -- ----</span></span>
+    </div>
+    <div id="card">
+      <div id="answer-text"></div>
+      <img id="watermark-img" src="assets/supported_by_aliendl.png" alt="Supported by Aliendl"/>
+      <div id="buttons">
+        <img id="download-button" class="btn"
+             src="assets/button-download.png"
+             data-pressed="assets/button-download-pressed.png" alt="下载"/>
+        <img id="regenerate-button" class="btn"
+             src="assets/button-regenerate.png"
+             data-pressed="assets/button-regenerate-pressed.png" alt="重新生成"/>
+        <img id="visit-button" class="btn"
+             src="assets/button-visit.png"
+             data-pressed="assets/button-visit-pressed.png" alt="跳转官网"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- page1 hints loader -->
   <script>
     fetch("texts/page1_hint.txt")
-      .then(res => res.text())
+      .then(r => r.text())
       .then(text => {
         const lines = text.trim().split("\n");
-        document.getElementById("hint1").textContent = lines[0] || "";
-        document.getElementById("hint2").textContent = lines[1] || "";
+        setTimeout(() => { document.getElementById("hint1").textContent = lines[0] || ""; }, 1000);
+        setTimeout(() => { document.getElementById("hint2").textContent = lines[1] || ""; }, 4000);
       });
   </script>
 
-  <!-- 引入 html2canvas（必须） -->
+  <!-- html2canvas must come before your script.js -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <!-- 再加载你的主逻辑 -->
   <script src="script.js"></script>
 </body>
 </html>
