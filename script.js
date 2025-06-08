@@ -83,18 +83,95 @@ btnVisit.addEventListener("click", () => window.open("https://aliendl.com", "_bl
 
 // 7️⃣ 所见即所得截图下载
 function downloadCurrent() {
-  const page2El   = document.getElementById("page2");
   const buttonsEl = document.getElementById("buttons");
   buttonsEl.style.visibility = "hidden";
 
-  html2canvas(page2El, {
-    useCORS: true,
-    scale: window.devicePixelRatio
-  }).then(canvas => {
+  // 1) grab background URL
+  const bgUrl = document
+    .getElementById("card")
+    .style.backgroundImage.slice(5, -2);
+
+  // 2) grab on-screen text
+  const locText   = document.getElementById("current-location").textContent;
+  const timeText  = document.getElementById("current-time").textContent;
+  const dateText  = document.getElementById("current-date").textContent;
+  const answerStr = document.getElementById("answer-text").textContent;
+
+  // 3) load the full-res image
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = bgUrl;
+
+  img.onload = () => {
+    const W = img.naturalWidth,
+          H = img.naturalHeight;
+    const canvas = document.createElement("canvas");
+    canvas.width  = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+
+    // draw the full background
+    ctx.drawImage(img, 0, 0, W, H);
+
+    // draw info-bar at 6% down
+    const infoFs = Math.round(W * 0.03);
+    ctx.font      = `italic ${infoFs}px Bodoni MT`;
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    const yInfo   = H * 0.06;
+    ctx.fillText(locText,  W * 0.25, yInfo);
+    ctx.fillText(timeText, W * 0.50, yInfo);
+    ctx.fillText(dateText, W * 0.75, yInfo);
+
+    // draw Arabic text at ~35% down, right-aligned with 5% margin
+    const answerFs = Math.round(W * 0.05);
+    ctx.font        = `${answerFs}px Traditional Arabic`;
+    ctx.fillStyle   = "white";
+    ctx.textAlign   = "right";
+    ctx.lineWidth   = 2;
+    ctx.strokeStyle = "rgba(0,0,0,0.6)";
+    ctx.shadowColor = "white";
+    ctx.shadowBlur  = answerFs * 0.1;
+    let textY       = H * 0.35;
+    answerStr.split("\n").forEach(line => {
+      ctx.strokeText(line, W * 0.95, textY);
+      ctx.fillText  (line, W * 0.95, textY);
+      textY += answerFs * 1.2;
+    });
+
+    // draw watermark at bottom-right, 10% up from bottom
+    const wmImg = new Image();
+    wmImg.crossOrigin = "anonymous";
+    wmImg.src = document.getElementById("watermark-img").src;
+    wmImg.onload = () => {
+      const wmW = wmImg.naturalWidth * 0.3;
+      const wmH = wmImg.naturalHeight * 0.3;
+      const wmX = W - wmW - W * 0.05;
+      const wmY = H - wmH - H * 0.10;
+      ctx.globalAlpha = 0.6;
+      ctx.drawImage(wmImg, wmX, wmY, wmW, wmH);
+      ctx.globalAlpha = 1;
+
+      // restore buttons & download
+      buttonsEl.style.visibility = "visible";
+      const a = document.createElement("a");
+      a.href    = canvas.toDataURL("image/png");
+      a.download = "aliendl-answer.png";
+      a.click();
+    };
+  };
+
+  img.onerror = () => {
+    // fallback to html2canvas if cross-origin fails
     buttonsEl.style.visibility = "visible";
-    const a = document.createElement("a");
-    a.href    = canvas.toDataURL("image/png");
-    a.download = "aliendl-answer.png";
-    a.click();
-  });
+    html2canvas(document.getElementById("page2"), {
+      useCORS: true,
+      scale: window.devicePixelRatio
+    }).then(canvas => {
+      const a = document.createElement("a");
+      a.href    = canvas.toDataURL("image/png");
+      a.download = "aliendl-answer.png";
+      a.click();
+    });
+  };
 }
