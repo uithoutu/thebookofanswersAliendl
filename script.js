@@ -26,29 +26,33 @@ fetch("texts/page1_hint.txt")
     setTimeout(() => { hint2.textContent = lines[1] || ""; }, 4000);
   });
 
-// 2️⃣ 预加载图片 & 文案数据
-let imageUrls = [];
+// 2️⃣ 预加载图片链接 & 阿拉伯文案列表
+let imageUrls   = [];
 let arabicTexts = [];
-Promise.all([
-  fetch("texts/image_urls.json").then(r => r.json()),
-  fetch("texts/arabic_texts.json").then(r => r.json())
-]).then(([imgs, texts]) => {
-  imageUrls = imgs;
-  arabicTexts = texts;
-});
+
+fetch("texts/image_urls.json")
+  .then(r => r.text())
+  .then(t => {
+    imageUrls = t.trim().split(/\r?\n/).filter(l => l);
+  });
+
+fetch("texts/arabic_texts.json")
+  .then(r => r.text())
+  .then(t => {
+    arabicTexts = t.trim().split(/\r?\n/).filter(l => l);
+  });
 
 // 3️⃣ 时间/日期/地点 更新函数
 function updateDateTime() {
   const now = new Date();
-  // 时间
   infoTime.textContent = now.toLocaleTimeString("en-US", {
     hour: "2-digit", minute: "2-digit"
   });
-  // 日期
   infoDate.textContent = now.toLocaleDateString("en-US", {
     year: "numeric", month: "2-digit", day: "2-digit"
   });
 }
+
 function updateLocation() {
   if (!navigator.geolocation) {
     infoLocation.textContent = "Unavailable";
@@ -67,13 +71,13 @@ function updateLocation() {
 function showPage2() {
   // 随机背景
   if (imageUrls.length) {
-    const url = imageUrls[Math.floor(Math.random()*imageUrls.length)];
+    const url = imageUrls[Math.floor(Math.random() * imageUrls.length)];
     page2.style.backgroundImage = `url('${url}')`;
   }
   // 随机答案
   if (arabicTexts.length) {
     answerText.textContent = arabicTexts[
-      Math.floor(Math.random()*arabicTexts.length)
+      Math.floor(Math.random() * arabicTexts.length)
     ];
   }
   // 更新 info
@@ -94,8 +98,8 @@ setTimeout(() => {
 [btnDownload, btnRegenerate, btnVisit].forEach(btn => {
   const normal  = btn.src;
   const pressed = btn.dataset.pressed;
-  btn.addEventListener("touchstart", () => btn.src = pressed);
-  btn.addEventListener("touchend",   () => btn.src = normal);
+  btn.addEventListener("touchstart", () => { if (pressed) btn.src = pressed; });
+  btn.addEventListener("touchend",   () => { btn.src = normal; });
 });
 
 btnDownload.addEventListener("click", downloadCurrent);
@@ -104,23 +108,29 @@ btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_bla
 
 // 7️⃣ 下载当前卡片内容（Page2 中的 #card 区域）
 function downloadCurrent() {
-  // 动态载入 html2canvas
+  const btns = document.getElementById("buttons");
+  // 隐藏按钮
+  btns.style.visibility = "hidden";
+
+  const doCapture = () => {
+    html2canvas(document.getElementById("card"), { useCORS: true })
+      .then(canvas => {
+        // 恢复按钮
+        btns.style.visibility = "visible";
+        // 触发下载
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "aliendl-answer.png";
+        link.click();
+      });
+  };
+
   if (!window.html2canvas) {
     const script = document.createElement("script");
     script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-    script.onload = () => captureAndSave();
+    script.onload = doCapture;
     document.body.appendChild(script);
   } else {
-    captureAndSave();
-  }
-
-  function captureAndSave() {
-    const card = document.getElementById("card");
-    html2canvas(card, { useCORS: true }).then(canvas => {
-      const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = "aliendl-answer.png";
-      link.click();
-    });
+    doCapture();
   }
 }
