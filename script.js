@@ -110,65 +110,79 @@ function downloadCurrent() {
   const buttonsEl = document.getElementById("buttons");
   buttonsEl.style.visibility = "hidden";
 
-  // 取背景图地址
-  const bgUrl = document.getElementById("card").style.backgroundImage
-    .slice(5, -2);
+  // 1. grab the background URL
+  const bgUrl = document.getElementById("card")
+    .style.backgroundImage.slice(5, -2);
 
-  // 取文本
+  // 2. grab all the text
   const locText   = infoLocation.textContent;
-  const timeText  = infoTime.textContent;
-  const dateText  = infoDate.textContent;
-  const answerStr = answerText.textContent; // <-- 用这个
+  const timeText  = infoTime .textContent;
+  const dateText  = infoDate .textContent;
+  const answerStr = answerText.textContent;
 
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.src = bgUrl;
 
   img.onload = () => {
-    const W = img.naturalWidth,
-          H = img.naturalHeight;
-    const canvas = document.createElement("canvas");
-    canvas.width  = W;
-    canvas.height = H;
-    const ctx = canvas.getContext("2d");
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+    const dpr = window.devicePixelRatio || 1;
 
-    // 1️⃣ 背景
+    // 3. create a high-res canvas
+    const canvas = document.createElement("canvas");
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    // if you want it to show 1:1 in the DOM you can also:
+    // canvas.style.width  = W + "px";
+    // canvas.style.height = H + "px";
+
+    const ctx = canvas.getContext("2d");
+    // 4. scale everything so 1 CSS-pixel === 1 canvas unit
+    ctx.scale(dpr, dpr);
+
+    // 5. draw the background
     ctx.drawImage(img, 0, 0, W, H);
 
-    // 2️⃣ 顶栏
-    ctx.fillStyle   = "white";
-    ctx.textAlign   = "center";
-    const infoFs    = Math.round(W * 0.03);
-    ctx.font        = `italic ${infoFs}px Bodoni MT`;
-    const yInfo     = Math.round(H * 0.06);
+    // 6. draw the info-bar using its computed CSS font-size
+    const frame = document.querySelector("#info-bar .frame");
+    const infoFontPx = parseFloat(
+      window.getComputedStyle(frame).fontSize
+    );
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.font = `italic ${infoFontPx}px Bodoni MT`;
+    const yInfo = H * 0.06;
     ctx.fillText(locText,  W * 0.25, yInfo);
     ctx.fillText(timeText, W * 0.50, yInfo);
     ctx.fillText(dateText, W * 0.75, yInfo);
 
-    // 3️⃣ 阿拉伯文案
-    const textX           = W * 0.95;
-    let   textY           = Math.round(H * 0.35);
-    const answerFs        = Math.round(W * 0.05);
-    ctx.font              = `${answerFs}px Traditional Arabic`;
-    ctx.fillStyle         = "white";
-    ctx.textAlign         = "right";
-    ctx.lineWidth         = 2;
-    ctx.strokeStyle       = "rgba(0,0,0,0.6)";
-    ctx.shadowColor       = "white";
-    ctx.shadowBlur        = answerFs * 0.1;
+    // 7. draw the Arabic text using its computed CSS font-size
+    const answerFontPx = parseFloat(
+      window.getComputedStyle(answerText).fontSize
+    );
+    ctx.font        = `${answerFontPx}px Traditional Arabic`;
+    ctx.fillStyle   = "white";
+    ctx.textAlign   = "right";
+    ctx.lineWidth   = 2;
+    ctx.strokeStyle = "rgba(0,0,0,0.6)";
+    ctx.shadowColor = "white";
+    ctx.shadowBlur  = answerFontPx * 0.1;
 
+    let textY = H * 0.35;
+    const textX = W * 0.95;
     answerStr.split("\n").forEach(line => {
       ctx.strokeText(line, textX, textY);
-      ctx.fillText(line,   textX, textY);
-      textY += answerFs * 1.2;
+      ctx.fillText  (line, textX, textY);
+      textY += answerFontPx * 1.2;
     });
 
-    // 4️⃣ 水印
+    // 8. draw watermark at the bottom
     const wmImg = new Image();
     wmImg.crossOrigin = "anonymous";
-    wmImg.src         = document.getElementById("watermark-img").src;
+    wmImg.src = document.getElementById("watermark-img").src;
     wmImg.onload = () => {
-      const wmW = wmImg.naturalWidth * 0.3;
+      const wmW = wmImg.naturalWidth  * 0.3;
       const wmH = wmImg.naturalHeight * 0.3;
       const wmX = W - wmW - W * 0.05;
       const wmY = H - wmH - H * 0.10;
@@ -176,15 +190,16 @@ function downloadCurrent() {
       ctx.drawImage(wmImg, wmX, wmY, wmW, wmH);
       ctx.globalAlpha = 1;
 
-      // 恢复按钮，再下载
+      // 9. restore buttons and download
       buttonsEl.style.visibility = "visible";
       const a = document.createElement("a");
       a.href    = canvas.toDataURL("image/png");
       a.download = "aliendl-answer.png";
       a.click();
     };
+
     wmImg.onerror = () => {
-      // 水印加载失败也继续
+      // even if watermark fails, still allow download
       buttonsEl.style.visibility = "visible";
       const a = document.createElement("a");
       a.href    = canvas.toDataURL("image/png");
@@ -194,9 +209,13 @@ function downloadCurrent() {
   };
 
   img.onerror = () => {
-    console.warn("绘制跨域图片失败，回退 html2canvas");
+    // fallback to html2canvas at high scale
+    console.warn("CORS error, falling back to html2canvas");
     buttonsEl.style.visibility = "visible";
-    html2canvas(document.getElementById("card"), { useCORS: true }).then(canvas => {
+    html2canvas(document.getElementById("card"), {
+      useCORS: true,
+      scale: window.devicePixelRatio
+    }).then(canvas => {
       buttonsEl.style.visibility = "visible";
       const a = document.createElement("a");
       a.href    = canvas.toDataURL("image/png");
@@ -205,4 +224,3 @@ function downloadCurrent() {
     });
   };
 }
-
