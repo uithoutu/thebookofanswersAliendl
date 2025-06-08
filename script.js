@@ -107,99 +107,89 @@ btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_bla
 
 // 7️⃣ 下载卡片，不含按钮
 function downloadCurrent() {
+  const cardEl    = document.getElementById("card");
   const buttonsEl = document.getElementById("buttons");
   buttonsEl.style.visibility = "hidden";
 
-  // 1. grab the background URL
-  const bgUrl = document.getElementById("card")
-    .style.backgroundImage.slice(5, -2);
-
-  // 2. grab all the text
-  const locText   = infoLocation.textContent;
-  const timeText  = infoTime .textContent;
-  const dateText  = infoDate .textContent;
-  const answerStr = answerText.textContent;
-
-  const img = new Image();
+  // 1️⃣ 拿背景图 URL & 载入原始大图
+  const bgUrl = cardEl.style.backgroundImage.slice(5, -2);
+  const img   = new Image();
   img.crossOrigin = "anonymous";
-  img.src = bgUrl;
+  img.src         = bgUrl;
 
   img.onload = () => {
-    const W = img.naturalWidth;
-    const H = img.naturalHeight;
+    // 2️⃣ 画布按原始图大小 & DPR
+    const W   = img.naturalWidth;
+    const H   = img.naturalHeight;
     const dpr = window.devicePixelRatio || 1;
-
-    // 3. create a high-res canvas
     const canvas = document.createElement("canvas");
     canvas.width  = W * dpr;
     canvas.height = H * dpr;
-    // if you want it to show 1:1 in the DOM you can also:
-    // canvas.style.width  = W + "px";
-    // canvas.style.height = H + "px";
-
     const ctx = canvas.getContext("2d");
-    // 4. scale everything so 1 CSS-pixel === 1 canvas unit
     ctx.scale(dpr, dpr);
 
-    // 5. draw the background
+    // 3️⃣ 计算“页面上 card 的实际宽度” 和 缩放比例
+    const displayW = cardEl.clientWidth;
+    const scale    = W / displayW;
+
+    // 4️⃣ 先把背景画上去
     ctx.drawImage(img, 0, 0, W, H);
 
-    // 6. draw the info-bar using its computed CSS font-size
-    const frame = document.querySelector("#info-bar .frame");
-    const infoFontPx = parseFloat(
-      window.getComputedStyle(frame).fontSize
-    );
+    // 5️⃣ 绘制顶部信息栏（地点／时间／日期）——我们用百分比定位，不用测量具体 DOM
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
-    ctx.font = `italic ${infoFontPx}px Bodoni MT`;
-    const yInfo = H * 0.06;
-    ctx.fillText(locText,  W * 0.25, yInfo);
-    ctx.fillText(timeText, W * 0.50, yInfo);
-    ctx.fillText(dateText, W * 0.75, yInfo);
-
-    // 7. draw the Arabic text using its computed CSS font-size
-    const answerFontPx = parseFloat(
-      window.getComputedStyle(answerText).fontSize
+    // 取页面上渲染时的 font-size
+    const infoFontDisplayPx = parseFloat(
+      getComputedStyle(document.querySelector("#info-bar .frame"))
+        .fontSize
     );
-    ctx.font        = `${answerFontPx}px Traditional Arabic`;
-    ctx.fillStyle   = "white";
-    ctx.textAlign   = "right";
-    ctx.lineWidth   = 2;
-    ctx.strokeStyle = "rgba(0,0,0,0.6)";
-    ctx.shadowColor = "white";
-    ctx.shadowBlur  = answerFontPx * 0.1;
+    // 等比放大到原图上
+    const infoFontPx = infoFontDisplayPx * scale;
+    ctx.font       = `italic ${infoFontPx}px Bodoni MT`;
+    const yInfo    = H * 0.06;  // 6% 处
+    ctx.fillText(infoLocation.textContent, W * 0.25, yInfo);
+    ctx.fillText(infoTime.textContent,     W * 0.50, yInfo);
+    ctx.fillText(infoDate.textContent,     W * 0.75, yInfo);
 
+    // 6️⃣ 绘制阿拉伯文案
+    const answerFontDisplayPx = parseFloat(
+      getComputedStyle(answerText).fontSize
+    );
+    const answerFontPx = answerFontDisplayPx * scale;
+    ctx.font          = `${answerFontPx}px Traditional Arabic`;
+    ctx.fillStyle     = "white";
+    ctx.textAlign     = "right";
+    ctx.lineWidth     = answerFontPx * 0.05;
+    ctx.strokeStyle   = "rgba(0,0,0,0.6)";
+    ctx.shadowColor   = "white";
+    ctx.shadowBlur    = answerFontPx * 0.1;
+
+    // 文案在页面上大概是从 35% 高度开始
     let textY = H * 0.35;
-    const textX = W * 0.95;
-    answerStr.split("\n").forEach(line => {
+    const textX = W * 0.95; // 右侧 5%
+    answerText.textContent.split("\n").forEach(line => {
       ctx.strokeText(line, textX, textY);
-      ctx.fillText  (line, textX, textY);
+      ctx.fillText(line,   textX, textY);
       textY += answerFontPx * 1.2;
     });
 
-    // 8. draw watermark at the bottom
+    // 7️⃣ 绘制水印（等比缩放、等比定位）
+    const wmDisplayW = document.getElementById("watermark-img").clientWidth;
+    const wmDisplayH = document.getElementById("watermark-img").clientHeight;
     const wmImg = new Image();
     wmImg.crossOrigin = "anonymous";
     wmImg.src = document.getElementById("watermark-img").src;
     wmImg.onload = () => {
-      const wmW = wmImg.naturalWidth  * 0.3;
-      const wmH = wmImg.naturalHeight * 0.3;
+      const wmW = wmDisplayW * scale;
+      const wmH = wmDisplayH * scale;
+      // 页面上它大概贴在 “底部 10%” 处
       const wmX = W - wmW - W * 0.05;
       const wmY = H - wmH - H * 0.10;
       ctx.globalAlpha = 0.6;
       ctx.drawImage(wmImg, wmX, wmY, wmW, wmH);
       ctx.globalAlpha = 1;
 
-      // 9. restore buttons and download
-      buttonsEl.style.visibility = "visible";
-      const a = document.createElement("a");
-      a.href    = canvas.toDataURL("image/png");
-      a.download = "aliendl-answer.png";
-      a.click();
-    };
-
-    wmImg.onerror = () => {
-      // even if watermark fails, still allow download
+      // 8️⃣ 完成 → 恢复按钮并下载
       buttonsEl.style.visibility = "visible";
       const a = document.createElement("a");
       a.href    = canvas.toDataURL("image/png");
@@ -208,13 +198,12 @@ function downloadCurrent() {
     };
   };
 
+  // 如果跨域或加载失败，就回退 html2canvas（也加了 scale）
   img.onerror = () => {
-    // fallback to html2canvas at high scale
-    console.warn("CORS error, falling back to html2canvas");
-    buttonsEl.style.visibility = "visible";
-    html2canvas(document.getElementById("card"), {
+    console.warn("CORS/加载失败，回退 html2canvas + DPR");
+    html2canvas(cardEl, {
       useCORS: true,
-      scale: window.devicePixelRatio
+      scale: window.devicePixelRatio || 1
     }).then(canvas => {
       buttonsEl.style.visibility = "visible";
       const a = document.createElement("a");
@@ -224,3 +213,4 @@ function downloadCurrent() {
     });
   };
 }
+
