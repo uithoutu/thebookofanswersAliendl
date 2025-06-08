@@ -178,7 +178,7 @@ body {
 /* 水印 */
 #watermark-img {
   position: absolute;
-  bottom: 20vh;
+  bottom: 10vh;
   right: 5vw;
   height: 2.5vh;
   opacity: 0.6;
