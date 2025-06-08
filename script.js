@@ -107,24 +107,96 @@ btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_bla
 
 // 7️⃣ 下载卡片，不含按钮
 function downloadCurrent() {
-  const btns = document.getElementById("buttons");
-  btns.style.visibility = "hidden";
-  const capture = () => {
-    html2canvas(document.getElementById("card"), { useCORS: true })
-      .then(canvas => {
-        btns.style.visibility = "visible";
-        const a = document.createElement("a");
-        a.href = canvas.toDataURL("image/png");
-        a.download = "aliendl-answer.png";
-        a.click();
-      });
+  // 隐藏按钮，避免它们被 html2canvas 截到（不过我们不再用 html2canvas）
+  document.getElementById("buttons").style.visibility = "hidden";
+
+  // 拿到当前背景 URL
+  const bgUrl = document.getElementById("card").style.backgroundImage
+    .slice(5, -2); // 去掉 url("...") 包裹
+
+  // 拿到当前显示的文案和信息
+  const locText = document.getElementById("current-location").textContent;
+  const timeText = document.getElementById("current-time").textContent;
+  const dateText = document.getElementById("current-date").textContent;
+  const answerStr = document.getElementById("answer-text").textContent;
+  
+  // 加载图片
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = bgUrl;
+  img.onload = () => {
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+
+    // 1️⃣ 绘制背景
+    ctx.drawImage(img, 0, 0, W, H);
+
+    // 2️⃣ 绘制信息栏（顶端三项：左=地点 中=时间 右=日期）
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    // 选个显眼的大小，你可以根据实际 W 调整
+    const infoFontSize = Math.round(W * 0.03); 
+    ctx.font = `italic ${infoFontSize}px Bodoni MT`;
+    const yInfo = Math.round(H * 0.06); // 顶部 6% 高度
+    ctx.fillText(locText, W * 0.25, yInfo);
+    ctx.fillText(timeText, W * 0.50, yInfo);
+    ctx.fillText(dateText, W * 0.75, yInfo);
+
+    // 3️⃣ 绘制阿拉伯文案
+    // 右对齐、从右边 5% 内边距开始
+    const textX = W * 0.95;
+    let textY = Math.round(H * 0.35); // 文案开始 Y
+    // 文案样式
+    const answerFontSize = Math.round(W * 0.05);
+    ctx.font = `${answerFontSize}px Traditional Arabic`;
+    ctx.fillStyle = "white";
+    ctx.textAlign = "right";
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(0,0,0,0.6)";
+    ctx.shadowColor = "white";
+    ctx.shadowBlur = answerFontSize * 0.1;
+
+    // 如果文案有换行（'\n'），逐行绘
+    answerText.split("\n").forEach(line => {
+      // 先描边
+      ctx.strokeText(line, textX, textY);
+      // 再填充
+      ctx.fillText(line, textX, textY);
+      textY += answerFontSize * 1.2; // 行高
+    });
+
+    // 4️⃣ 绘制水印（右下角）
+    const watermark = document.getElementById("watermark-img");
+    const wmImg = new Image();
+    wmImg.crossOrigin = "anonymous";
+    wmImg.src = watermark.src;
+    wmImg.onload = () => {
+      const wmW = wmImg.naturalWidth * 0.3;  // 缩到 30%
+      const wmH = wmImg.naturalHeight * 0.3;
+      const wmX = W - wmW - W * 0.05;        // 右侧 5% 内边距
+      const wmY = H - wmH - H * 0.10;       // 底部 10%
+      ctx.globalAlpha = 0.6;
+      ctx.drawImage(wmImg, wmX, wmY, wmW, wmH);
+      ctx.globalAlpha = 1;
+
+      // 恢复按钮可见
+      document.getElementById("buttons").style.visibility = "visible";
+
+      // 5️⃣ 触发下载
+      const a = document.createElement("a");
+      a.href = canvas.toDataURL("image/png");
+      a.download = "aliendl-answer.png";
+      a.click();
+    };
   };
-  if (!window.html2canvas) {
-    const s = document.createElement("script");
-    s.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-    s.onload = capture;
-    document.body.appendChild(s);
-  } else {
-    capture();
-  }
+
+  img.onerror = () => {
+    // 如果跨域或加载失败，退回 html2canvas 方案
+    document.getElementById("buttons").style.visibility = "visible";
+    console.warn("直接绘制失败，建议确保背景图允许跨域 (CORS)。");
+  };
 }
