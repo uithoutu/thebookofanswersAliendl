@@ -76,15 +76,19 @@
 </div>
   
 <!-- 加载文案 -->
-<script>
-  fetch("texts/page1_hint.txt")
-    .then((res) => res.text())
-    .then((text) => {
-      const lines = text.trim().split("\n");
-      document.getElementById("hint1").textContent = lines[0] || "";
-      document.getElementById("hint2").textContent = lines[1] || "";
-    });
-</script>
-<script src="script.js"></script>
+  <script>
+    fetch("texts/page1_hint.txt")
+      .then(res => res.text())
+      .then(text => {
+        const lines = text.trim().split("\n");
+        document.getElementById("hint1").textContent = lines[0] || "";
+        document.getElementById("hint2").textContent = lines[1] || "";
+      });
+  </script>
+
+  <!-- 引入 html2canvas（必须） -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <!-- 再加载你的主逻辑 -->
+  <script src="script.js"></script>
 </body>
 </html>
