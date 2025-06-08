@@ -177,24 +177,29 @@ body {
 
 /* 水印 */
 #watermark-img {
-  align-self: flex-end;
+  position: absolute;
+  bottom: 20vh;
+  right: 5vw;
   height: 2.5vh;
   opacity: 0.6;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+  z-index: 3;
 }
 
 /* 按钮组 */
 #buttons {
+  position: absolute;
+  /* 距离卡片底部 5vh，可根据设计图再微调 */
+  bottom: 5vh;
+  /* 水平居中 */
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: space-around;
   gap: 5vw;
-  /* 上移按钮 */
-  margin-bottom: 6vh;
   z-index: 3;
 }
 .btn {
-  max-width: 60px;
-  max-height: 60px;
+  max-width: 70px;
+  max-height: 70px;
   touch-action: manipulation;
 }
