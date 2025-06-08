@@ -83,76 +83,114 @@ btnVisit.addEventListener("click", () => window.open("https://aliendl.com", "_bl
 
 // 7️⃣ 所见即所得截图下载
 function downloadCurrent() {
+  const cardEl    = document.getElementById("card");
   const buttonsEl = document.getElementById("buttons");
+
+  // 1) hide the buttons so they don’t appear on the final
   buttonsEl.style.visibility = "hidden";
 
-  // 1) grab background URL
-  const bgUrl = document
-    .getElementById("card")
-    .style.backgroundImage.slice(5, -2);
+  // 2) pull out the background-image URL
+  const bgUrl = cardEl.style.backgroundImage.slice(5, -2);
 
-  // 2) grab on-screen text
-  const locText   = document.getElementById("current-location").textContent;
-  const timeText  = document.getElementById("current-time").textContent;
-  const dateText  = document.getElementById("current-date").textContent;
-  const answerStr = document.getElementById("answer-text").textContent;
+  // 3) measure the on-screen size of #card
+  const cardRect = cardEl.getBoundingClientRect();
+  const cardW    = cardRect.width;
+  const cardH    = cardRect.height;
 
-  // 3) load the full-res image
+  // 4) load the full-res image
   const img = new Image();
   img.crossOrigin = "anonymous";
-  img.src = bgUrl;
+  img.src         = bgUrl;
+  img.onload      = () => {
+    const W     = img.naturalWidth;
+    const H     = img.naturalHeight;
+    const scale = W / cardW;
 
-  img.onload = () => {
-    const W = img.naturalWidth,
-          H = img.naturalHeight;
+    // 5) make a canvas at the full-res dimensions
     const canvas = document.createElement("canvas");
     canvas.width  = W;
     canvas.height = H;
     const ctx = canvas.getContext("2d");
 
-    // draw the full background
+    // 6) draw the background at full size
     ctx.drawImage(img, 0, 0, W, H);
 
-    // draw info-bar at 6% down
-    const infoFs = Math.round(W * 0.03);
-    ctx.font      = `italic ${infoFs}px Bodoni MT`;
-    ctx.fillStyle = "white";
-    ctx.textAlign = "center";
-    const yInfo   = H * 0.06;
-    ctx.fillText(locText,  W * 0.25, yInfo);
-    ctx.fillText(timeText, W * 0.50, yInfo);
-    ctx.fillText(dateText, W * 0.75, yInfo);
+    // 7) helper to draw any on-screen element’s text
+    function drawTextFrom(el, options = {}) {
+      const r = el.getBoundingClientRect();
+      const cs = window.getComputedStyle(el);
 
-    // draw Arabic text at ~35% down, right-aligned with 5% margin
-    const answerFs = Math.round(W * 0.05);
-    ctx.font        = `${answerFs}px Traditional Arabic`;
-    ctx.fillStyle   = "white";
-    ctx.textAlign   = "right";
-    ctx.lineWidth   = 2;
-    ctx.strokeStyle = "rgba(0,0,0,0.6)";
-    ctx.shadowColor = "white";
-    ctx.shadowBlur  = answerFs * 0.1;
-    let textY       = H * 0.35;
-    answerStr.split("\n").forEach(line => {
-      ctx.strokeText(line, W * 0.95, textY);
-      ctx.fillText  (line, W * 0.95, textY);
-      textY += answerFs * 1.2;
+      // font
+      const cssFontSize = parseFloat(cs.fontSize);
+      const fontFamily  = cs.fontFamily.replace(/["']/g, "");
+      const fontStyle   = cs.fontStyle;
+      ctx.font          = `${fontStyle} ${cssFontSize * scale}px ${fontFamily}`;
+      ctx.fillStyle     = cs.color;
+      ctx.textAlign     = options.align || "left";
+      if (options.stroke) {
+        ctx.lineWidth   = options.strokeWidth * scale;
+        ctx.strokeStyle = options.strokeColor;
+      }
+      if (options.shadow) {
+        ctx.shadowColor = options.shadowColor;
+        ctx.shadowBlur  = options.shadowBlur * scale;
+      }
+
+      // position
+      const x = (r.left - cardRect.left + (options.xOffset || 0)) * scale;
+      const y = (r.top  - cardRect.top  + (options.yOffset || cssFontSize)) * scale;
+
+      const lines = el.textContent.trim().split("\n");
+      const lineHeight = parseFloat(cs.lineHeight) * scale;
+      lines.forEach(line => {
+        if (options.stroke) ctx.strokeText(line, x, y);
+        ctx.fillText(line, x, y);
+        y += lineHeight;
+      });
+
+      // clear shadow
+      ctx.shadowBlur = 0;
+    }
+
+    // 8) draw the three info-bar spans, center-aligned
+    const infoSpans = document.querySelectorAll("#info-bar .frame");
+    infoSpans.forEach(span => {
+      drawTextFrom(span, {
+        align:    "center",
+        xOffset:  span.getBoundingClientRect().width / 2,
+      });
     });
 
-    // draw watermark at bottom-right, 10% up from bottom
+    // 9) draw the Arabic answer, right-aligned
+    drawTextFrom(
+      document.getElementById("answer-text"), {
+        align:       "right",
+        stroke:      true,
+        strokeWidth: 0.2,               // your CSS stroke
+        strokeColor: "rgba(0,0,0,0.6)",
+        shadow:      true,
+        shadowColor: "white",
+        shadowBlur:  4,                 // your CSS blur
+        xOffset:     document.getElementById("answer-text").getBoundingClientRect().width,
+      }
+    );
+
+    // 10) draw the watermark image at its on-screen spot
+    const wmEl = document.getElementById("watermark-img");
+    const wmR  = wmEl.getBoundingClientRect();
     const wmImg = new Image();
     wmImg.crossOrigin = "anonymous";
-    wmImg.src = document.getElementById("watermark-img").src;
-    wmImg.onload = () => {
-      const wmW = wmImg.naturalWidth * 0.3;
-      const wmH = wmImg.naturalHeight * 0.3;
-      const wmX = W - wmW - W * 0.05;
-      const wmY = H - wmH - H * 0.10;
-      ctx.globalAlpha = 0.6;
+    wmImg.src         = wmEl.src;
+    wmImg.onload      = () => {
+      const wmW  = wmR.width  * scale;
+      const wmH  = wmR.height * scale;
+      const wmX  = (wmR.left - cardRect.left) * scale;
+      const wmY  = (wmR.top  - cardRect.top ) * scale;
+      ctx.globalAlpha = parseFloat(window.getComputedStyle(wmEl).opacity);
       ctx.drawImage(wmImg, wmX, wmY, wmW, wmH);
       ctx.globalAlpha = 1;
 
-      // restore buttons & download
+      // 11) restore buttons & trigger the download
       buttonsEl.style.visibility = "visible";
       const a = document.createElement("a");
       a.href    = canvas.toDataURL("image/png");
@@ -161,12 +199,12 @@ function downloadCurrent() {
     };
   };
 
+  // 12) error fallback: if CORS fails, just html2canvas the entire #page2
   img.onerror = () => {
-    // fallback to html2canvas if cross-origin fails
     buttonsEl.style.visibility = "visible";
     html2canvas(document.getElementById("page2"), {
       useCORS: true,
-      scale: window.devicePixelRatio
+      scale:   window.devicePixelRatio
     }).then(canvas => {
       const a = document.createElement("a");
       a.href    = canvas.toDataURL("image/png");
