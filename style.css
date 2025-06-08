@@ -152,16 +152,22 @@ body {
 
 /* 随机答案文案 */
 #answer-text {
+  position: absolute;
+  top: 15vh;
+  left: 5vw;
+  right: 5vw;
+  margin: 0;
+  
   font-family: 'Traditional Arabic', serif;
   font-size: 38px;
   line-height: 57px;
   color: white;
   direction: rtl;
   text-align: right;
+  
   -webkit-text-stroke: 0.2px rgba(0, 0, 0, 0.6);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.4), 0 0 4px white;
-  /* 下移到屏幕中央偏下 */
-  margin-top: 12vh;
+  
   opacity: 0;
   animation: fadeInAnswer 3s ease-in-out forwards;
 }
