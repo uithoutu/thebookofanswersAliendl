@@ -17,32 +17,33 @@ const btnDownload   = document.getElementById("download-button");
 const btnRegenerate = document.getElementById("regenerate-button");
 const btnVisit      = document.getElementById("visit-button");
 
-// 1️⃣ 加载 Page1 的文案：1s 后出现第一行，4s 后出现第二行
+// 1️⃣ Page1 文案加载
 fetch("texts/page1_hint.txt")
-  .then(res => res.text())
+  .then(r => r.text())
   .then(text => {
     const lines = text.trim().split("\n");
     setTimeout(() => { hint1.textContent = lines[0] || ""; }, 1000);
     setTimeout(() => { hint2.textContent = lines[1] || ""; }, 4000);
   });
 
-// 2️⃣ 预加载图片链接 & 阿拉伯文案列表
-let imageUrls   = [];
+// 2️⃣ 预加载背景图（JSON 数组）和阿拉伯文案（JSON 数组）
+let imageUrls = [];
 let arabicTexts = [];
 
 fetch("texts/image_urls.json")
-  .then(r => r.text())
-  .then(t => {
-    imageUrls = t.trim().split(/\r?\n/).filter(l => l);
+  .then(r => r.json())
+  .then(arr => {
+    imageUrls = arr;
   });
 
 fetch("texts/arabic_texts.json")
-  .then(r => r.text())
-  .then(t => {
-    arabicTexts = t.trim().split(/\r?\n/).filter(l => l);
+  .then(r => r.json())
+  .then(arr => {
+    // 去掉每条开头可能的 “数字. ” 前缀
+    arabicTexts = arr.map(s => s.replace(/^\d+\.\s*/, "").trim());
   });
 
-// 3️⃣ 时间/日期/地点 更新函数
+// 3️⃣ 时间／日期／地点 更新
 function updateDateTime() {
   const now = new Date();
   infoTime.textContent = now.toLocaleTimeString("en-US", {
@@ -52,7 +53,6 @@ function updateDateTime() {
     year: "numeric", month: "2-digit", day: "2-digit"
   });
 }
-
 function updateLocation() {
   if (!navigator.geolocation) {
     infoLocation.textContent = "Unavailable";
@@ -67,7 +67,7 @@ function updateLocation() {
   );
 }
 
-// 4️⃣ 显示 Page2 的主逻辑
+// 4️⃣ 切换到 Page2 主逻辑
 function showPage2() {
   // 随机背景
   if (imageUrls.length) {
@@ -80,57 +80,51 @@ function showPage2() {
       Math.floor(Math.random() * arabicTexts.length)
     ];
   }
-  // 更新 info
+  // 更新信息栏
   updateDateTime();
   updateLocation();
-
   // 切换视图
   page1.style.display = "none";
   page2.style.display = "block";
 }
 
-// 5️⃣ 绑定 Page1 点击 → showPage2（8秒后才允许点击）  
+// 5️⃣ 8 秒后才允许点击进入
 setTimeout(() => {
   page1.addEventListener("click", showPage2);
 }, 8000);
 
-// 6️⃣ 按钮按下态 + 功能绑定
+// 6️⃣ 按钮按下效果 & 功能绑定
 [btnDownload, btnRegenerate, btnVisit].forEach(btn => {
   const normal  = btn.src;
   const pressed = btn.dataset.pressed;
-  btn.addEventListener("touchstart", () => { if (pressed) btn.src = pressed; });
-  btn.addEventListener("touchend",   () => { btn.src = normal; });
+  btn.addEventListener("touchstart", () => pressed && (btn.src = pressed));
+  btn.addEventListener("touchend",   () => btn.src = normal);
 });
 
 btnDownload.addEventListener("click", downloadCurrent);
 btnRegenerate.addEventListener("click", () => window.location.reload());
 btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_blank"));
 
-// 7️⃣ 下载当前卡片内容（Page2 中的 #card 区域）
+// 7️⃣ 下载卡片，不含按钮
 function downloadCurrent() {
   const btns = document.getElementById("buttons");
-  // 隐藏按钮
   btns.style.visibility = "hidden";
-
-  const doCapture = () => {
+  const capture = () => {
     html2canvas(document.getElementById("card"), { useCORS: true })
       .then(canvas => {
-        // 恢复按钮
         btns.style.visibility = "visible";
-        // 触发下载
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "aliendl-answer.png";
-        link.click();
+        const a = document.createElement("a");
+        a.href = canvas.toDataURL("image/png");
+        a.download = "aliendl-answer.png";
+        a.click();
       });
   };
-
   if (!window.html2canvas) {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-    script.onload = doCapture;
-    document.body.appendChild(script);
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+    s.onload = capture;
+    document.body.appendChild(s);
   } else {
-    doCapture();
+    capture();
   }
 }
