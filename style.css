@@ -129,7 +129,9 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-color: black; /* 全局背景色 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* 顶部信息栏 */
@@ -161,12 +163,8 @@ body {
   left: 5vw;
   right: 5vw;
   bottom: 8vh;  
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  background-size: cover;      /* 背景铺满 */
-  background-position: center; /* 居中显示 */
-  background-repeat: no-repeat;
+  background-color: transparent;
+  backdrop-filter: none;
   border-radius: 20px;
   padding: 2vh 4vw;
   display: flex;
