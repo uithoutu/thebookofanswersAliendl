@@ -16,6 +16,7 @@ body {
   font-family: 'Bodoni MT', serif;
 }
 
+/* Page 通用容器 */
 .page {
   position: absolute;
   top: 0;
@@ -128,9 +129,7 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
+  background-color: black; /* 全局背景色 */
 }
 
 /* 顶部信息栏 */
@@ -154,16 +153,21 @@ body {
   line-height: 1;
 }
 
-/* 半透明圆角卡片 */
+/* —— 关键改动 —— */
+/* 卡片容器：把背景图加在这里 */
 #card {
   position: absolute;
   top: 18vh;
   left: 5vw;
   right: 5vw;
   bottom: 8vh;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1); /* 半透明底色 */
   backdrop-filter: blur(10px);
   border-radius: 20px;
+  overflow: hidden;            /* 圆角剪裁 */
+  background-size: cover;      /* 背景铺满 */
+  background-position: center; /* 居中显示 */
+  background-repeat: no-repeat;
   padding: 2vh 4vw;
   display: flex;
   flex-direction: column;
@@ -180,9 +184,7 @@ body {
   color: white;
   direction: rtl;
   text-align: right;
-  /* 黑色描边 */
   -webkit-text-stroke: 0.2px rgba(0, 0, 0, 0.6);
-  /* 阴影 + 外发光 */
   text-shadow:
     0 0 2px rgba(0, 0, 0, 0.4),
     0 0 4px white;
@@ -207,10 +209,10 @@ body {
   justify-content: space-around;
   gap: 5vw;
   margin-bottom: 2vh;
+  z-index: 3;
 }
 .btn {
   width: 15vw;
   max-width: 60px;
   touch-action: manipulation;
 }
-
