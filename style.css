@@ -160,14 +160,14 @@ body {
   top: 18vh;
   left: 5vw;
   right: 5vw;
-  bottom: 8vh;
-  background: rgba(255, 255, 255, 0.1); /* 半透明底色 */
+  bottom: 8vh;  
+  background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  overflow: hidden;            /* 圆角剪裁 */
   background-size: cover;      /* 背景铺满 */
   background-position: center; /* 居中显示 */
   background-repeat: no-repeat;
+  border-radius: 20px;
   padding: 2vh 4vw;
   display: flex;
   flex-direction: column;
@@ -212,7 +212,9 @@ body {
   z-index: 3;
 }
 .btn {
-  width: 15vw;
+  width: auto;
+  height: auto;
   max-width: 60px;
+  max-height: 60px;
   touch-action: manipulation;
 }
