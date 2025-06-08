@@ -110,7 +110,7 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: transparent;           /* 先清空灰色 */
-  background-size: contain;            /* 铺满 */
+  background-size: cover;            /* 铺满 */
   background-position: center;       /* 居中 */
   background-repeat: no-repeat;
   padding: 0;                        /* 内边距由绝对定位的子元素来控制 */
