@@ -106,41 +106,29 @@ btnRegenerate.addEventListener("click", () => window.location.reload());
 btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_blank"));
 
 // 7️⃣ 下载卡片，不含按钮
-async function downloadCurrent() {
-  const cardEl    = document.getElementById("card");
+function downloadCurrent() {
+  const page2El   = document.getElementById("page2");
   const buttonsEl = document.getElementById("buttons");
 
-  // 1. 隐藏按钮，免得它们被截图进去
+  // 1) 隐藏按钮
   buttonsEl.style.visibility = "hidden";
 
-  // 2. 载入背景图以拿到它的 naturalWidth
-  const bgUrl = cardEl.style.backgroundImage.slice(5, -2);
-  const img   = await new Promise((res, rej) => {
-    const i = new Image();
-    i.crossOrigin = "anonymous";
-    i.onload  = () => res(i);
-    i.onerror = rej;
-    i.src     = bgUrl;
-  }).catch(() => null);
-
-  // 3. 计算放大比例：naturalWidth / 屏幕上 card 的 CSS 宽度
-  let scale = window.devicePixelRatio || 1;
-  if (img) {
-    const cardW = cardEl.getBoundingClientRect().width;
-    scale = img.naturalWidth / cardW;
-  }
-
-  // 4. 调用 html2canvas，把 scale 传进去
-  const canvas = await html2canvas(cardEl, {
+  // 2) 抓取页面（所见即所得），w×h = CSS 像素 × devicePixelRatio
+  html2canvas(page2El, {
     useCORS: true,
-    scale
+    scale: window.devicePixelRatio
+  }).then(canvas => {
+    // 3) 截图后还原按钮
+    buttonsEl.style.visibility = "visible";
+
+    // 4) 触发下载
+    const a = document.createElement("a");
+    a.href    = canvas.toDataURL("image/png");
+    a.download = "aliendl-answer.png";
+    a.click();
   });
+}
 
-  // 5. 恢复按钮可见
-  buttonsEl.style.visibility = "visible";
-
-  // 6. 触发下载
-  const a = document.createElement("a");
   a.href    = canvas.toDataURL("image/png");
   a.download = "aliendl-answer.png";
   a.click();
