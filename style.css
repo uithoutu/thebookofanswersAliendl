@@ -161,7 +161,7 @@ body {
   -webkit-text-stroke: 0.2px rgba(0, 0, 0, 0.6);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.4), 0 0 4px white;
   /* 下移到屏幕中央偏下 */
-  margin-top: 24vh;
+  margin-top: 12vh;
   opacity: 0;
   animation: fadeInAnswer 3s ease-in-out forwards;
 }
