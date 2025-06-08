@@ -106,111 +106,42 @@ btnRegenerate.addEventListener("click", () => window.location.reload());
 btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_blank"));
 
 // 7️⃣ 下载卡片，不含按钮
-function downloadCurrent() {
+async function downloadCurrent() {
   const cardEl    = document.getElementById("card");
   const buttonsEl = document.getElementById("buttons");
+
+  // 1. 隐藏按钮，免得它们被截图进去
   buttonsEl.style.visibility = "hidden";
 
-  // 1️⃣ 拿背景图 URL & 载入原始大图
+  // 2. 载入背景图以拿到它的 naturalWidth
   const bgUrl = cardEl.style.backgroundImage.slice(5, -2);
-  const img   = new Image();
-  img.crossOrigin = "anonymous";
-  img.src         = bgUrl;
+  const img   = await new Promise((res, rej) => {
+    const i = new Image();
+    i.crossOrigin = "anonymous";
+    i.onload  = () => res(i);
+    i.onerror = rej;
+    i.src     = bgUrl;
+  }).catch(() => null);
 
-  img.onload = () => {
-    // 2️⃣ 画布按原始图大小 & DPR
-    const W   = img.naturalWidth;
-    const H   = img.naturalHeight;
-    const dpr = window.devicePixelRatio || 1;
-    const canvas = document.createElement("canvas");
-    canvas.width  = W * dpr;
-    canvas.height = H * dpr;
-    const ctx = canvas.getContext("2d");
-    ctx.scale(dpr, dpr);
+  // 3. 计算放大比例：naturalWidth / 屏幕上 card 的 CSS 宽度
+  let scale = window.devicePixelRatio || 1;
+  if (img) {
+    const cardW = cardEl.getBoundingClientRect().width;
+    scale = img.naturalWidth / cardW;
+  }
 
-    // 3️⃣ 计算“页面上 card 的实际宽度” 和 缩放比例
-    const displayW = cardEl.clientWidth;
-    const scale    = W / displayW;
+  // 4. 调用 html2canvas，把 scale 传进去
+  const canvas = await html2canvas(cardEl, {
+    useCORS: true,
+    scale
+  });
 
-    // 4️⃣ 先把背景画上去
-    ctx.drawImage(img, 0, 0, W, H);
+  // 5. 恢复按钮可见
+  buttonsEl.style.visibility = "visible";
 
-    // 5️⃣ 绘制顶部信息栏（地点／时间／日期）——我们用百分比定位，不用测量具体 DOM
-    ctx.fillStyle = "white";
-    ctx.textAlign = "center";
-    // 取页面上渲染时的 font-size
-    const infoFontDisplayPx = parseFloat(
-      getComputedStyle(document.querySelector("#info-bar .frame"))
-        .fontSize
-    );
-    // 等比放大到原图上
-    const infoFontPx = infoFontDisplayPx * scale;
-    ctx.font       = `italic ${infoFontPx}px Bodoni MT`;
-    const yInfo    = H * 0.06;  // 6% 处
-    ctx.fillText(infoLocation.textContent, W * 0.25, yInfo);
-    ctx.fillText(infoTime.textContent,     W * 0.50, yInfo);
-    ctx.fillText(infoDate.textContent,     W * 0.75, yInfo);
-
-    // 6️⃣ 绘制阿拉伯文案
-    const answerFontDisplayPx = parseFloat(
-      getComputedStyle(answerText).fontSize
-    );
-    const answerFontPx = answerFontDisplayPx * scale;
-    ctx.font          = `${answerFontPx}px Traditional Arabic`;
-    ctx.fillStyle     = "white";
-    ctx.textAlign     = "right";
-    ctx.lineWidth     = answerFontPx * 0.05;
-    ctx.strokeStyle   = "rgba(0,0,0,0.6)";
-    ctx.shadowColor   = "white";
-    ctx.shadowBlur    = answerFontPx * 0.1;
-
-    // 文案在页面上大概是从 35% 高度开始
-    let textY = H * 0.35;
-    const textX = W * 0.95; // 右侧 5%
-    answerText.textContent.split("\n").forEach(line => {
-      ctx.strokeText(line, textX, textY);
-      ctx.fillText(line,   textX, textY);
-      textY += answerFontPx * 1.2;
-    });
-
-    // 7️⃣ 绘制水印（等比缩放、等比定位）
-    const wmDisplayW = document.getElementById("watermark-img").clientWidth;
-    const wmDisplayH = document.getElementById("watermark-img").clientHeight;
-    const wmImg = new Image();
-    wmImg.crossOrigin = "anonymous";
-    wmImg.src = document.getElementById("watermark-img").src;
-    wmImg.onload = () => {
-      const wmW = wmDisplayW * scale;
-      const wmH = wmDisplayH * scale;
-      // 页面上它大概贴在 “底部 10%” 处
-      const wmX = W - wmW - W * 0.05;
-      const wmY = H - wmH - H * 0.10;
-      ctx.globalAlpha = 0.6;
-      ctx.drawImage(wmImg, wmX, wmY, wmW, wmH);
-      ctx.globalAlpha = 1;
-
-      // 8️⃣ 完成 → 恢复按钮并下载
-      buttonsEl.style.visibility = "visible";
-      const a = document.createElement("a");
-      a.href    = canvas.toDataURL("image/png");
-      a.download = "aliendl-answer.png";
-      a.click();
-    };
-  };
-
-  // 如果跨域或加载失败，就回退 html2canvas（也加了 scale）
-  img.onerror = () => {
-    console.warn("CORS/加载失败，回退 html2canvas + DPR");
-    html2canvas(cardEl, {
-      useCORS: true,
-      scale: window.devicePixelRatio || 1
-    }).then(canvas => {
-      buttonsEl.style.visibility = "visible";
-      const a = document.createElement("a");
-      a.href    = canvas.toDataURL("image/png");
-      a.download = "aliendl-answer.png";
-      a.click();
-    });
-  };
+  // 6. 触发下载
+  const a = document.createElement("a");
+  a.href    = canvas.toDataURL("image/png");
+  a.download = "aliendl-answer.png";
+  a.click();
 }
-
