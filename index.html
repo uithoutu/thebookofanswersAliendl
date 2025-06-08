@@ -29,24 +29,52 @@
 
 <!-- Page 2 -->
 <div class="page" id="page2">
-  <div id="answer-box">这里将显示一句阿拉伯语答案</div>
-  <img id="answer-image" src="" alt="Generated Image" style="width: 100%; max-height: 50vh; object-fit: contain;" />
-
+  <!-- 顶部信息栏 -->
   <div id="info-bar">
-    <span class="frame" id="current-time">--:--</span>
-    <span class="frame" id="current-date">-- -- ----</span>
-    <span class="frame" id="current-location">--</span>
+    <span class="frame"><span id="current-location">--</span></span>
+    <span class="frame"><span id="current-time">--:--</span></span>
+    <span class="frame"><span id="current-date">-- -- ----</span></span>
   </div>
 
-  <div id="buttons">
-    <button class="button" id="download-button">下载</button>
-    <button class="button" id="visit-button">跳转官网</button>
-    <button class="button" id="regenerate-button">重新生成</button>
-  </div>
+  <!-- 半透明圆角卡片，承载文字、水印和按钮 -->
+  <div id="card">
+    <!-- 阿拉伯语答案 -->
+    <div id="answer-text"></div>
 
-  <div id="watermark">@Aliendl</div>
+    <!-- 水印 -->
+    <img
+      id="watermark-img"
+      src="assets/supported_by_aliendl.png"
+      alt="Supported by Aliendl"
+    />
+
+    <!-- 按钮组 -->
+    <div id="buttons">
+      <img
+        id="download-button"
+        class="btn"
+        src="assets/button-download.png"
+        data-pressed="assets/button-download-pressed.png"
+        alt="下载"
+      />
+      <img
+        id="regenerate-button"
+        class="btn"
+        src="assets/button-regenerate.png"
+        data-pressed="assets/button-regenerate-pressed.png"
+        alt="重新生成"
+      />
+      <img
+        id="visit-button"
+        class="btn"
+        src="assets/button-visit.png"
+        data-pressed="assets/button-visit-pressed.png"
+        alt="跳转官网"
+      />
+    </div>
+  </div>
 </div>
-
+  
 <!-- 加载文案 -->
 <script>
   fetch("texts/page1_hint.txt")
