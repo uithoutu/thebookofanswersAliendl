@@ -155,17 +155,15 @@ body {
   line-height: 1;
 }
 
-/* —— 关键改动 —— */
-/* 卡片容器：把背景图加在这里 */
+
 #card {
   position: absolute;
-  top: 18vh;
-  left: 5vw;
-  right: 5vw;
-  bottom: 8vh;  
+  top: 0vh;
+  left: 0vw;
+  right: 0vw;
+  bottom: 0vh;  
   background-color: transparent;
   backdrop-filter: none;
-  border-radius: 20px;
   padding: 2vh 4vw;
   display: flex;
   flex-direction: column;
@@ -196,7 +194,7 @@ body {
 /* 水印 */
 #watermark-img {
   width: auto;
-  height: 3.5vh;
+  height: 3vh;
   align-self: flex-end;
   opacity: 0.6;
 }
