@@ -93,8 +93,8 @@ function downloadCurrent() {
   html2canvas(page2El, {
     useCORS: true,
     // scale 设置为 devicePixelRatio，可根据测试再调大一点，比如 *1.5
-    scale: window.devicePixelRatio || 1
-  }).then(canvas => {
+    scale: (window.devicePixelRatio || 1) * 1.5
+}).then(canvas => {
     // 还原按钮
     buttonsEl.style.visibility = "visible";
 
