@@ -90,26 +90,46 @@ function downloadCurrent() {
   buttonsEl.style.visibility = "hidden";
 
   // 使用 html2canvas，高分辨率截图
-  html2canvas(page2El, {
-    useCORS: true,
-    // scale 设置为 devicePixelRatio，可根据测试再调大一点，比如 *1.5
-    scale: (window.devicePixelRatio || 1) * 1.5
+html2canvas(page2El, {
+  useCORS: true,
+  // 将画布的分辨率提高到设备像素比 *1.5
+  scale: (window.devicePixelRatio || 1) * 1.5
 }).then(canvas => {
-    // 还原按钮
-    buttonsEl.style.visibility = "visible";
+  // 按钮恢复可见
+  buttonsEl.style.visibility = "visible";
 
-    // 触发下载
-    canvas.toBlob(blob => {
+ // 这里开始用 toBlob 生成图像数据
+  canvas.toBlob(blob => {
+    // —— 在这儿加 Web Share API 检测/调用 ——  
+    const file = new File([blob], 'aliendl-answer.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        files: [file],
+        title: 'Aliendl 答案卡',
+        text: '这里是你的 Aliendl 回答'
+      }).catch(err => {
+        console.warn('分享失败，回退下载', err);
+        // 回退到普通下载
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = 'aliendl-answer.png';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+    } else {
+      // 不支持分享时：执行普通下载
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = "aliendl-answer.png";
+      a.download = 'aliendl-answer.png';
       a.click();
-      // 释放
       URL.revokeObjectURL(a.href);
-    }, "image/png");
-  }).catch(err => {
-    console.error("截图失败，尝试原图 Canvas 绘制：", err);
-    // 恢复按钮并回退旧逻辑……
-    buttonsEl.style.visibility = "visible";
-  });
-}
+    }
+  }, 'image/png');
+
+}).catch(err => {
+  buttonsEl.style.visibility = "visible";
+  console.error("截图失败，回退原下载逻辑", err);
+  // …这里可以回退到不带 scale 的 html2canvas 或者
+  // 直接之前的 Canvas 绘制方案
+});
+
