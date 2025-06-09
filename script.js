@@ -32,8 +32,8 @@ fetch("texts/arabic_texts.json").then(r => r.json()).then(arr => {
 // 3️⃣ 时间／地点 更新
 function updateDateTime() {
   const now = new Date();
-  infoTime.textContent = now.toLocaleTimeString("en-US", {hour:"2-digit",minute:"2-digit"});
-  infoDate.textContent = now.toLocaleDateString("en-US", {year:"numeric",month:"2-digit",day:"2-digit"});
+  infoTime.textContent = now.toLocaleTimeString("en-GB", {hour:"2-digit",minute:"2-digit",hour12: false});
+  infoDate.textContent = now.toLocaleDateString("en-GB", {year:"numeric",month:"2-digit",day:"2-digit"});
 }
 function updateLocation() {
   if (!navigator.geolocation) {
