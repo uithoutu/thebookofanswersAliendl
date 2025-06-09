@@ -63,8 +63,8 @@ function showPage2() {
   page2.style.display = "block";
 }
 
-// 5️⃣ 8 秒后允许点击进入
-setTimeout(() => page1.addEventListener("click", showPage2), 8000);
+// 5️⃣ 8 秒后自动跳转
+setTimeout(showPage2, 8000);
 
 // 6️⃣ 按钮按下态 & 功能
 [btnDownload, btnRegenerate, btnVisit].forEach(btn => {
