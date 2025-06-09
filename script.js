@@ -64,7 +64,10 @@ function showPage2() {
 }
 
 // 5️⃣ 8 秒后自动跳转
-setTimeout(showPage2, 8000);
+window.addEventListener("load", () => {
+  setTimeout(showPage2, 8000);
+});
+
 
 // 6️⃣ 按钮按下态 & 功能
 [btnDownload, btnRegenerate, btnVisit].forEach(btn => {
