@@ -7,6 +7,12 @@
   font-style: normal;
 }
 
+html, body, #page2 {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+}
+
 /* 通用样式 */
 body {
   margin: 0;
