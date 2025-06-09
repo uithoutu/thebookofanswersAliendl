@@ -1,18 +1,14 @@
+// ========= 脚本开始 =========
+
 // 全局元素
 const page1 = document.getElementById("page1");
 const page2 = document.getElementById("page2");
-
-// Page1 提示文案
 const hint1 = document.getElementById("hint1");
 const hint2 = document.getElementById("hint2");
-
-// Page2 元素
 const infoLocation = document.getElementById("current-location");
 const infoTime     = document.getElementById("current-time");
 const infoDate     = document.getElementById("current-date");
 const answerText   = document.getElementById("answer-text");
-
-// 按钮
 const btnDownload   = document.getElementById("download-button");
 const btnRegenerate = document.getElementById("regenerate-button");
 const btnVisit      = document.getElementById("visit-button");
@@ -26,18 +22,18 @@ fetch("texts/page1_hint.txt")
     setTimeout(() => { hint2.textContent = lines[1] || ""; }, 4000);
   });
 
-// 2️⃣ 预加载背景图 & 阿拉伯文案
+// 2️⃣ 预加载背景图 & 文案
 let imageUrls = [], arabicTexts = [];
 fetch("texts/image_urls.json").then(r => r.json()).then(arr => imageUrls = arr);
 fetch("texts/arabic_texts.json").then(r => r.json()).then(arr => {
   arabicTexts = arr.map(s => s.replace(/^\d+\.\s*/, "").trim());
 });
 
-// 3️⃣ 时间/日期/地点 更新
+// 3️⃣ 时间／地点 更新
 function updateDateTime() {
   const now = new Date();
-  infoTime.textContent = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-  infoDate.textContent = now.toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" });
+  infoTime.textContent = now.toLocaleTimeString("en-US", {hour:"2-digit",minute:"2-digit"});
+  infoDate.textContent = now.toLocaleDateString("en-US", {year:"numeric",month:"2-digit",day:"2-digit"});
 }
 function updateLocation() {
   if (!navigator.geolocation) {
@@ -67,7 +63,7 @@ function showPage2() {
   page2.style.display = "block";
 }
 
-// 5️⃣ 8 秒后才允许点击进入
+// 5️⃣ 8 秒后允许点击进入
 setTimeout(() => page1.addEventListener("click", showPage2), 8000);
 
 // 6️⃣ 按钮按下态 & 功能
@@ -77,9 +73,9 @@ setTimeout(() => page1.addEventListener("click", showPage2), 8000);
   btn.addEventListener("touchstart", () => pressed && (btn.src = pressed));
   btn.addEventListener("touchend",   () => btn.src = normal);
 });
-btnDownload.addEventListener("click", downloadCurrent);
 btnRegenerate.addEventListener("click", () => window.location.reload());
-btnVisit.addEventListener("click", () => window.open("https://aliendl.com", "_blank"));
+btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_blank"));
+btnDownload.addEventListener("click", downloadCurrent);
 
 // 7️⃣ 所见即所得截图下载
 function downloadCurrent() {
@@ -89,47 +85,44 @@ function downloadCurrent() {
   // 隐藏按钮
   buttonsEl.style.visibility = "hidden";
 
-  // 使用 html2canvas，高分辨率截图
-html2canvas(page2El, {
-  useCORS: true,
-  // 将画布的分辨率提高到设备像素比 *1.5
-  scale: (window.devicePixelRatio || 1) * 1.5
-}).then(canvas => {
-  // 按钮恢复可见
-  buttonsEl.style.visibility = "visible";
+  html2canvas(page2El, {
+    useCORS: true,
+    scale: (window.devicePixelRatio || 1) * 1.5
+  }).then(canvas => {
+    // 恢复按钮
+    buttonsEl.style.visibility = "visible";
 
- // 这里开始用 toBlob 生成图像数据
-  canvas.toBlob(blob => {
-    // —— 在这儿加 Web Share API 检测/调用 ——  
-    const file = new File([blob], 'aliendl-answer.png', { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({
-        files: [file],
-        title: 'Aliendl 答案卡',
-        text: '这里是你的 Aliendl 回答'
-      }).catch(err => {
-        console.warn('分享失败，回退下载', err);
-        // 回退到普通下载
+    // 把 canvas 转成 Blob
+    canvas.toBlob(blob => {
+      const file = new File([blob], 'aliendl-answer.png', { type: 'image/png' });
+
+      // Web Share API 优先
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({
+          files: [file],
+          title: 'Aliendl 答案卡',
+          text: '这里是你的 Aliendl 回答'
+        }).catch(() => {
+          // 分享失败再回退到下载
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = 'aliendl-answer.png';
+          a.click();
+          URL.revokeObjectURL(a.href);
+        });
+      } else {
+        // 不支持分享，走下载
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = 'aliendl-answer.png';
         a.click();
         URL.revokeObjectURL(a.href);
-      });
-    } else {
-      // 不支持分享时：执行普通下载
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = 'aliendl-answer.png';
-      a.click();
-      URL.revokeObjectURL(a.href);
-    }
-  }, 'image/png');
+      }
+    }, 'image/png');
+  }).catch(err => {
+    console.error("截图失败：", err);
+    buttonsEl.style.visibility = "visible";
+  });
+}
 
-}).catch(err => {
-  buttonsEl.style.visibility = "visible";
-  console.error("截图失败，回退原下载逻辑", err);
-  // …这里可以回退到不带 scale 的 html2canvas 或者
-  // 直接之前的 Canvas 绘制方案
-});
-
+// ========= 脚本结束 =========
