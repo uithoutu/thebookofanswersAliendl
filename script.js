@@ -83,133 +83,33 @@ btnVisit.addEventListener("click", () => window.open("https://aliendl.com", "_bl
 
 // 7️⃣ 所见即所得截图下载
 function downloadCurrent() {
-  const cardEl    = document.getElementById("card");
+  const page2El   = document.getElementById("page2");
   const buttonsEl = document.getElementById("buttons");
 
-  // 1) hide the buttons so they don’t appear on the final
+  // 隐藏按钮
   buttonsEl.style.visibility = "hidden";
 
-  // 2) pull out the background-image URL
-  const bgUrl = cardEl.style.backgroundImage.slice(5, -2);
-
-  // 3) measure the on-screen size of #card
-  const cardRect = cardEl.getBoundingClientRect();
-  const cardW    = cardRect.width;
-  const cardH    = cardRect.height;
-
-  // 4) load the full-res image
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src         = bgUrl;
-  img.onload      = () => {
-    const W     = img.naturalWidth;
-    const H     = img.naturalHeight;
-    const scale = W / cardW;
-
-    // 5) make a canvas at the full-res dimensions
-    const canvas = document.createElement("canvas");
-    canvas.width  = W;
-    canvas.height = H;
-    const ctx = canvas.getContext("2d");
-
-    // 6) draw the background at full size
-    ctx.drawImage(img, 0, 0, W, H);
-
-    // 7) helper to draw any on-screen element’s text
-    function drawTextFrom(el, options = {}) {
-      const r = el.getBoundingClientRect();
-      const cs = window.getComputedStyle(el);
-
-      // font
-      const cssFontSize = parseFloat(cs.fontSize);
-      const fontFamily  = cs.fontFamily.replace(/["']/g, "");
-      const fontStyle   = cs.fontStyle;
-      ctx.font          = `${fontStyle} ${cssFontSize * scale}px ${fontFamily}`;
-      ctx.fillStyle     = cs.color;
-      ctx.textAlign     = options.align || "left";
-      if (options.stroke) {
-        ctx.lineWidth   = options.strokeWidth * scale;
-        ctx.strokeStyle = options.strokeColor;
-      }
-      if (options.shadow) {
-        ctx.shadowColor = options.shadowColor;
-        ctx.shadowBlur  = options.shadowBlur * scale;
-      }
-
-      // position
-      const x = (r.left - cardRect.left + (options.xOffset || 0)) * scale;
-      const y = (r.top  - cardRect.top  + (options.yOffset || cssFontSize)) * scale;
-
-      const lines = el.textContent.trim().split("\n");
-      const lineHeight = parseFloat(cs.lineHeight) * scale;
-      lines.forEach(line => {
-        if (options.stroke) ctx.strokeText(line, x, y);
-        ctx.fillText(line, x, y);
-        y += lineHeight;
-      });
-
-      // clear shadow
-      ctx.shadowBlur = 0;
-    }
-
-    // 8) draw the three info-bar spans, center-aligned
-    const infoSpans = document.querySelectorAll("#info-bar .frame");
-    infoSpans.forEach(span => {
-      drawTextFrom(span, {
-        align:    "center",
-        xOffset:  span.getBoundingClientRect().width / 2,
-      });
-    });
-
-    // 9) draw the Arabic answer, right-aligned
-    drawTextFrom(
-      document.getElementById("answer-text"), {
-        align:       "right",
-        stroke:      true,
-        strokeWidth: 0.2,               // your CSS stroke
-        strokeColor: "rgba(0,0,0,0.6)",
-        shadow:      true,
-        shadowColor: "white",
-        shadowBlur:  4,                 // your CSS blur
-        xOffset:     document.getElementById("answer-text").getBoundingClientRect().width,
-      }
-    );
-
-    // 10) draw the watermark image at its on-screen spot
-    const wmEl = document.getElementById("watermark-img");
-    const wmR  = wmEl.getBoundingClientRect();
-    const wmImg = new Image();
-    wmImg.crossOrigin = "anonymous";
-    wmImg.src         = wmEl.src;
-    wmImg.onload      = () => {
-      const wmW  = wmR.width  * scale;
-      const wmH  = wmR.height * scale;
-      const wmX  = (wmR.left - cardRect.left) * scale;
-      const wmY  = (wmR.top  - cardRect.top ) * scale;
-      ctx.globalAlpha = parseFloat(window.getComputedStyle(wmEl).opacity);
-      ctx.drawImage(wmImg, wmX, wmY, wmW, wmH);
-      ctx.globalAlpha = 1;
-
-      // 11) restore buttons & trigger the download
-      buttonsEl.style.visibility = "visible";
-      const a = document.createElement("a");
-      a.href    = canvas.toDataURL("image/png");
-      a.download = "aliendl-answer.png";
-      a.click();
-    };
-  };
-
-  // 12) error fallback: if CORS fails, just html2canvas the entire #page2
-  img.onerror = () => {
+  // 使用 html2canvas，高分辨率截图
+  html2canvas(page2El, {
+    useCORS: true,
+    // scale 设置为 devicePixelRatio，可根据测试再调大一点，比如 *1.5
+    scale: window.devicePixelRatio || 1
+  }).then(canvas => {
+    // 还原按钮
     buttonsEl.style.visibility = "visible";
-    html2canvas(document.getElementById("page2"), {
-      useCORS: true,
-      scale:   window.devicePixelRatio
-    }).then(canvas => {
+
+    // 触发下载
+    canvas.toBlob(blob => {
       const a = document.createElement("a");
-      a.href    = canvas.toDataURL("image/png");
+      a.href = URL.createObjectURL(blob);
       a.download = "aliendl-answer.png";
       a.click();
-    });
-  };
+      // 释放
+      URL.revokeObjectURL(a.href);
+    }, "image/png");
+  }).catch(err => {
+    console.error("截图失败，尝试原图 Canvas 绘制：", err);
+    // 恢复按钮并回退旧逻辑……
+    buttonsEl.style.visibility = "visible";
+  });
 }
