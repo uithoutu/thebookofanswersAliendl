@@ -127,10 +127,11 @@ body {
 #info-bar {
   position: absolute;
   top: 1.5vh;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 5vw;
+  right: 5vw;
   display: flex;
-  gap: 1vw;
+  justify-content: space-between;
+  align-items: center;
   z-index: 2;
 }
 #info-bar .frame {
@@ -182,12 +183,12 @@ body {
 /* 按钮组 */
 #buttons {
   position: absolute;
-  bottom: 12vh;
-  /* 水平居中 */
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 13vh;
+  left: 5vw;
+  right: 5vw;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: center;
   gap: 8vw;
   z-index: 3;
 }
