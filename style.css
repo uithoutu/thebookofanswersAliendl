@@ -1,3 +1,8 @@
+/* ===== 取消所有元素的 iOS Safari 触摸高亮 ===== */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 @font-face {
   font-family: 'Traditional Arabic';
   src: url('fonts/TraditionalArabic.woff2') format('woff2'),
