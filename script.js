@@ -101,9 +101,9 @@ window.addEventListener("load", () => {
 });
 
 // —— 按钮功能 —— 
-btnRegenerate.addEventListener("click", () => location.reload());
-btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_blank"));
-btnDownload.addEventListener("click", downloadCurrent);
+btnDownload.addEventListener('click', downloadCurrent);
+btnRegenerate.addEventListener('click', () => location.reload());
+btnVisit.addEventListener('click', () => window.open('https://aliendl.com','_blank'));
 
 // —— downloadCurrent —— 
 async function downloadCurrent() {
