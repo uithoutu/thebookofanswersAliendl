@@ -59,18 +59,33 @@ body {
 
 .loading-hint {
   position: absolute;
-  right:20px; width:calc(100%-40px);
+  right:20px; 
+  width:calc(100%-40px);
   font-family:'Traditional Arabic',serif;
-  font-size:40px; line-height:50px;
-  color:white; text-align:right;
+  font-size:40px; 
+  line-height:50px;
+  color:white; 
+  text-align:right;
   text-shadow:0 0 4px white;
-  opacity:0; z-index:3;
+  opacity:0; 
+  z-index:3;
 }
-#hint1 { top:22vh; animation: fadeInText 6s 0.3s forwards; }
-#hint2 { top:28vh; animation: fadeInText 6s 4s forwards; }
+
+#hint1 { top: 22vh; }
+#hint2 { top: 28vh; }
+
 @keyframes fadeInText {
   from { opacity:0; transform:translateY(10px); }
   to   { opacity:1; transform:translateY(0); }
+  
+  /* 第一行淡入：从 0.3s 开始，时长 1s */
+.fade-in-text-1 {
+  animation: fadeInText 6s ease-out 0.5s forwards;
+}
+
+/* 第二行淡入：从 2s 开始，时长 1s */
+.fade-in-text-2 {
+  animation: fadeInText 6s ease-out 2.5s forwards;
 }
 
 #center-wrapper {
