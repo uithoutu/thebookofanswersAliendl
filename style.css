@@ -1,14 +1,24 @@
-/* ========= 彻底禁用 iOS Safari 整页触摸高亮 & 按下背景 ========== */
-*,
-*::before,
-*::after {
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-touch-callout: none   !important; /* 长按菜单 */
-  -webkit-user-select: none     !important; /* 文本选择 */
-  background-color: transparent !important; /* 按下自动背景 */
-  outline: none                 !important; /* 焦点边框 */
+/* —— 彻底屏蔽 iOS 的触摸高亮、active 背景 —— */
+img, 
+.btn, 
+#info-bar .frame, 
+#buttons,
+#buttons img {
+  -webkit-tap-highlight-color: transparent !important; /* 基础高亮 */
+  tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none !important;  /* 长按菜单 */
+  user-select: none !important;
 }
 
+/* 覆盖 :active 伪类加的背景色 */
+img:active,
+.btn:active,
+#info-bar .frame:active,
+#buttons:active,
+#buttons img:active {
+  background-color: transparent !important;
+  opacity: 1 !important; /* 防止被 Safari 自动降透明 */
+}
 
 @font-face {
   font-family: 'Traditional Arabic';
