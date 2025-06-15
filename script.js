@@ -197,3 +197,21 @@ Object.assign(wmClone.style, {
     }
   }, "image/png");
 }
+
+const tapElements = [
+  ...document.querySelectorAll('.btn'),             // 你的按钮
+  ...document.querySelectorAll('#info-bar .frame')  // info-bar 里可点的 frame
+];
+
+tapElements.forEach(el => {
+  // 1️⃣ 阻止默认的触摸高亮
+  el.addEventListener('touchstart', e => {
+    e.preventDefault();
+  }, { passive: false });
+
+  // 2️⃣ 触摸结束时手动触发点击逻辑
+  el.addEventListener('touchend', e => {
+    e.preventDefault();
+    el.click();
+  });
+});
