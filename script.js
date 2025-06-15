@@ -182,30 +182,27 @@ async function showPage2() {
 
 // —— ⑦ 自动跳转 & 手动点击跳转 —— 
 window.addEventListener("load", () => {
-  // 500ms 后写入提示并开始淡入
   setTimeout(() => {
-    // 写入并修正文案
+    // 写入并淡入提示
     hint1.textContent = fixArabicPunctuation(page1Hints[0] || "");
     hint2.textContent = fixArabicPunctuation(page1Hints[1] || "");
-    // 淡入加载环 + 两行提示
     document.getElementById("center-wrapper").classList.add("fade-in-load");
     hint1.classList.add("fade-in-load");
     hint2.classList.add("fade-in-load");
 
-    // —— ① 自动跳转：6s 后执行 —— 
+    // 自动跳转
     const autoTimer = setTimeout(showPage2, 6000);
 
-    // —— ② 延迟 5s 后，点击 page1 任意处也能直接跳转 —— 
+    // 8s 后允许点击跳转
     setTimeout(() => {
       page1.addEventListener("click", () => {
-        clearTimeout(autoTimer);  // 取消未到的自动跳
+        clearTimeout(autoTimer);
         showPage2();
       }, { once: true });
     }, 5000);
 
-  }, 1000);
+  }, 1500);
 });
-
 
 // —— ⑧ 按钮功能 —— 
 btnRegenerate.addEventListener("click", () => location.reload());
