@@ -228,6 +228,36 @@ body {
   width: 80px !important;
   height: auto !important;
 }
+/* —— 按钮背景态 —— */
+#download-button {
+  background-image: url("assets/button-download.png");
+}
+#download-button:active {
+  background-image: url("assets/button-download-pressed.png");
+}
+
+#regenerate-button {
+  background-image: url("assets/button-regenerate.png");
+}
+#regenerate-button:active {
+  background-image: url("assets/button-regenerate-pressed.png");
+}
+
+#visit-button {
+  background-image: url("assets/button-visit.png");
+}
+#visit-button:active {
+  background-image: url("assets/button-visit-pressed.png");
+}
+
+/* 让按钮元素渲染背景图 */
+.btn {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  padding: 0;
+}
 
 #page2 {
   display: none;
