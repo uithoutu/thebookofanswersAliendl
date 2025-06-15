@@ -142,17 +142,28 @@ async function downloadCurrent() {
     left:     `${left}px`,
     width:    `${width}px`
   });
-  ["answer-text", "watermark-img"].forEach(id => {
-    const eC = clone.querySelector("#" + id);
-    const r  = document.getElementById(id).getBoundingClientRect();
-    Object.assign(eC.style, {
-      position:  "absolute",
-      top:       `${r.top}px`,
-      left:      `${r.left}px`,
-      transform: "none",
-      width:     `${r.width}px`
-    });
+  // 保持 answer-text 原位
+  const textClone = clone.querySelector("#answer-text");
+  const textOrig  = document.getElementById("answer-text").getBoundingClientRect();
+  Object.assign(textClone.style, {
+    position:  "absolute",
+    top:       `${textOrig.top}px`,
+    left:      `${textOrig.left}px`,
+    transform: "none",
+    width:     `${textOrig.width}px`
   });
+
+  // 把水印贴到底部再上移 5vh
+  const wmClone = clone.querySelector("#watermark-img");
+  const wmOrig  = document.getElementById("watermark-img").getBoundingClientRect();
+  Object.assign(wmClone.style, {
+    position:  "absolute",
+    bottom:    "5vh",
+    top:       "auto",
+    left:      `${wmOrig.left}px`,
+    width:     `${wmOrig.width}px`
+  });
+
 
   // 6️⃣ 离屏截图：注意 height 用 bgH
   const canvas = await html2canvas(clone, {
