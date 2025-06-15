@@ -201,7 +201,7 @@ window.addEventListener("load", () => {
       }, { once: true });
     }, 5000);
 
-  }, 1500);
+  }, 500);
 });
 
 // —— ⑧ 按钮功能 —— 
