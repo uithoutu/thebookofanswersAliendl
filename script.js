@@ -193,33 +193,30 @@ async function downloadCurrent() {
     height:  fullH
   });
 
-// 5️⃣ 清理并导出（改为 Web Share API 优先，其它浏览器回退到新标签展示）
+// 5️⃣ 清理并导出改为：Web Share API 分享文件，fallback 新标签展示
 document.body.removeChild(clone);
 canvas.toBlob(async blob => {
-  // 转成 DataURL
-  const reader = new FileReader();
-  reader.onloadend = async () => {
-    const dataURL = reader.result;
+  // 1️⃣ 先把 blob 包装成一个 File
+  const file = new File([blob], 'aliendl-answer.png', { type: 'image/png' });
 
-    // 构造一个带 ?share=DataURL 的链接
-    const shareURL = `${location.origin + location.pathname}?share=${encodeURIComponent(dataURL)}`;
-
-    if (navigator.share) {
-      try {
-        // 优先尝试原生分享（仅在支持的移动端浏览器有效）
-        await navigator.share({
-          title: 'Aliendl 答案卡',
-          text:  '这是我的 Aliendl 回应，点击查看并长按保存。',
-          url:   shareURL
-        });
-      } catch {
-        // 如果用户取消或分享失败，就回退到新标签展示图片
-        window.open(dataURL, '_blank');
-      }
-    } else {
-      // 不支持分享 API 的浏览器，直接新标签打开图片
-      window.open(dataURL, '_blank');
+  // 2️⃣ 如果浏览器支持分享文件，就直接调用系统分享面板
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: 'Aliendl 答案卡',
+        text: '这是我的 Aliendl 回应，长按图片可保存。',
+      });
+      return;
+    } catch (e) {
+      // 用户取消或分享失败，继续走 fallback
     }
+  }
+
+  // 3️⃣ fallback：在新标签打开图片，用户再长按「保存图像」
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    window.open(reader.result, '_blank');
   };
   reader.readAsDataURL(blob);
 }, 'image/png');
