@@ -1,7 +1,14 @@
-/* ===== 取消所有元素的 iOS Safari 触摸高亮 ===== */
-* {
-  -webkit-tap-highlight-color: transparent;
+/* ========= 彻底禁用 iOS Safari 整页触摸高亮 & 按下背景 ========== */
+*,
+*::before,
+*::after {
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none   !important; /* 长按菜单 */
+  -webkit-user-select: none     !important; /* 文本选择 */
+  background-color: transparent !important; /* 按下自动背景 */
+  outline: none                 !important; /* 焦点边框 */
 }
+
 
 @font-face {
   font-family: 'Traditional Arabic';
