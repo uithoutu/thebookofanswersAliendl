@@ -1,0 +1,281 @@
+@font-face {
+  font-family: 'Traditional Arabic';
+  src: url('fonts/TraditionalArabic.woff2') format('woff2'),
+       url('fonts/TraditionalArabic.woff') format('woff'),
+       url('fonts/TraditionalArabic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html, body, #page2 {
+  margin: 0; padding: 0;
+  width: 100%; 
+  overflow: auto;
+}
+
+/* 通用样式 */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: black;
+  font-family: 'Bodoni MT', serif;
+}
+
+/* Page 通用容器 */
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* === Page 1 === */
+#page1 {
+  position: relative;
+}
+
+#intro-video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;  opacity: 0;
+  animation: fadeInVideo 2s ease-in-out forwards;
+}
+@keyframes fadeInVideo {
+  to { opacity: 1; }
+}
+
+.loading-hint {
+  position: absolute;
+  right: 20px;
+  width: calc(100% - 40px);
+  font-family: 'Traditional Arabic', sans-serif;
+  font-size: 40px;
+  line-height: 50px;
+  color: white;
+  text-align: right;
+  text-shadow: 0 0 4px white;
+  opacity: 0;
+  /* 恢复逐行动画 */
+  z-index: 3;
+}
+
+.fade-in-load {
+  animation: fadeInText 6s ease-in-out forwards;
+}
+
+/* 保留单独给 hint1／hint2 定位 */
+#hint1 { top: 22vh; animation-delay: 1s; }
+#hint2 { top: 28vh; animation-delay: 4s; }
+
+@keyframes fadeInText {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* === Page 1 居中容器 === */
+#center-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 78px;
+  height: 78px;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+/* === 加载环 (SVG) 定位 === */
+#loading-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78px;   /* 与 SVG width/height 保持一致 */
+  height: 78px;
+  pointer-events: none;
+  overflow:visible;
+}
+
+
+/* === 水晶球 === */
+#orb {
+  position: absolute;
+  top: calc(50% - 2.5px);
+  left: 50%;
+  /* ← 一定要加，让球心对准容器中心 */
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: auto;
+  animation: flicker 2s infinite ease-in-out;
+  z-index: 4;
+}
+
+@keyframes flicker {
+  0%,100% { opacity: 0.2; }
+  50%     { opacity: 1; }
+}
+
+/* === Page 2 === */
+
+/* 顶部信息栏 */
+#info-bar {
+  position: absolute;
+  top: 1.5vh;
+  left: 5vw;
+  right: 5vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+  overflow: visible
+}
+
+/* —— 统一的底框样式 —— */
+#info-bar .frame {
+  display: flex;                      /* 让图标和文字并排 */
+  align-items: center;                /* 垂直居中 */
+  height: 24px;                       /* Figma 里高度 */
+  padding: 0 0.6em;                  /* 左右内边距 */
+  background-color: rgba(0,0,0,0.18); /* 黑色 18% 不透明 */
+  border-radius: 10px;                /* 圆角 10px */
+  box-shadow: 0 0 4px rgba(255,255,255,0.4); /* 白色发光 blur 4 */
+  font-family: 'Bodoni MT', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: white;
+  line-height: 1;
+  gap: 0.2em;                         /* 图标与文字之间留空隙 */
+}
+
+/* —— 定位图标样式 —— */
+#loc-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5em;                /* 圆点与文字间距 */
+}
+
+/* 随机答案文案 */
+#answer-text {
+  position: absolute;
+  top: 15vh;
+  left: 5vw;
+  right: 6vw;
+  margin: 0;
+  
+  font-family: 'Traditional Arabic', serif;
+  font-size: 38px;
+  line-height: 57px;
+  color: white;
+  direction: rtl;
+  text-align: right;
+  
+  -webkit-text-stroke: 0.2px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.4), 0 0 4px white;
+  
+  opacity: 0;
+  animation: fadeInAnswer 3s ease-in-out forwards;
+}
+@keyframes fadeInAnswer {
+  to { opacity: 1; }
+}
+
+/* 水印 */
+#watermark-img {
+  position: absolute;
+  top: calc(15vh + 20vh + 3vh);
+  right: 5vw;
+  height: 2.5vh;
+  opacity: 1;
+  z-index: 3;
+}
+
+/* 按钮组 */
+#buttons {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 18px);
+  left: 5vw;
+  right: 5vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8vw;
+  z-index: 3;
+}
+.btn {
+  width: 80px;
+  height: auto;
+  touch-action: manipulation;
+}
+/* 视频淡入 */
+#intro-video {
+  opacity: 0;
+  animation: fadeInVideo 1.5s ease-in-out forwards;
+}
+
+/* 加载区初始隐藏 */
+#center-wrapper {
+  opacity: 0;
+}
+/* 只给加载环+orb 的容器用 */
+@keyframes fadeInLoad {
+  to { opacity: 1; }
+}
+.fade-in-load {
+  animation: fadeInLoad 1s ease-in-out forwards;
+}
+
+/* === Page2 视口容器，始终占满屏幕，不自己滚动 === */
+#page2 {
+  display: none;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+/* 加 .show 后淡入显示 */
+#page2.show {
+  display: block;
+  opacity: 1;
+}
+
+/* === 内部可滚动卡片 === */
+#card {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: var(--bg-url);
+  background-size: 100% auto;
+  background-position: top center;
+  background-repeat: no-repeat;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+#bg-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 顶栏、文案、水印、按钮 全部固定不跟滚动走 */
+#info-bar,
+#answer-text,
+#watermark-img,
+#buttons {
+  position: fixed;
+  z-index: 3;
+}
+
+/* 阿拉伯语文本从右到左排版，标点断行时也遵循 RTL 习惯 */
+#hint1,
+#hint2,
+#answer-text {
+  direction: rtl;
+  unicode-bidi: isolate-override;
+  word-break: break-word;
+}

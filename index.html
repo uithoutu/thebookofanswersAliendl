@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aliendl - The Book of Answers</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Page 1 -->
+  <div class="page" id="page1">
+    <video id="intro-video" autoplay muted loop playsinline>
+      <source src="video/intro.mp4" type="video/mp4" />
+    </video>
+    <div class="loading-hint" id="hint1" dir="rtl"></div>
+    <div class="loading-hint" id="hint2" dir="rtl"></div>
+    <div id="center-wrapper">
+      <!-- SVG 加载环，从 12 点方向开始 -->
+      <svg id="loading-ring" width="78" height="78" viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="combined-glow-inner"
+                 x="-50%" y="-50%" width="200%" height="200%"
+                 filterUnits="objectBoundingBox">
+             <!-- 内阴影 -->
+             <feDropShadow dx="0" dy="0" stdDeviation="4"
+                    flood-color="rgba(0,0,0,0.1)" flood-opacity="1"
+                    result="inner"/>
+            <!-- 外发光 -->
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="glow"/>
+            <feMerge>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="inner"/>
+              <feMergeNode in="SourceGraphic"/>
+           </feMerge>
+         </filter>
+       </defs>
+        <g transform="rotate(-90 50 50)">
+<circle
+  cx="50" cy="50" r="45"
+  stroke="white" stroke-width="6" fill="none"
+  stroke-linecap="round"
+  stroke-dasharray="283" stroke-dashoffset="283"
+  filter="url(#combined-glow-inner)"
+>
+            <animate attributeName="stroke-dashoffset"
+                     from="283" to="0" dur="9.5s" repeatCount="1"     fill="freeze"/>
+          </circle>
+        </g>
+      </svg>
+      <img id="orb" src="assets/orb.png" alt="orb" />
+    </div>
+  </div>
+
+  <!-- Page 2 -->
+  <div class="page" id="page2">
+    <div id="info-bar">
+      <div class="frame">
+        <img id="loc-icon" src="assets/location-pin.png" alt="位置" />
+        <span id="current-location">--</span>
+      </div>
+      <div class="frame">
+        <span id="current-time">--:--</span>
+      </div>
+      <div class="frame">
+        <span id="current-date">-- -- ----</span>
+      </div>
+    </div>
+    <div id="card">
+      <img id="bg-img" alt="background" />
+      <div id="answer-text" dir="rtl"></div>
+      <img id="watermark-img" src="assets/supported_by_aliendl.png" alt="Supported by Aliendl"/>
+      <div id="buttons" data-html2canvas-ignore="true">
+        <img id="download-button" class="btn"
+             src="assets/button-download.png"
+             data-pressed="assets/button-download-pressed.png" alt="下载"/>
+        <img id="regenerate-button" class="btn"
+             src="assets/button-regenerate.png"
+             data-pressed="assets/button-regenerate-pressed.png" alt="重新生成"/>
+        <img id="visit-button" class="btn"
+             src="assets/button-visit.png"
+             data-pressed="assets/button-visit-pressed.png" alt="跳转官网"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- page1 hints loader -->
+  <script>
+    fetch("texts/page1_hint.txt")
+      .then(r => r.text())
+      .then(text => {
+        const lines = text.trim().split("\n");
+        setTimeout(() => { document.getElementById("hint1").textContent = lines[0] || ""; }, 1000);
+        setTimeout(() => { document.getElementById("hint2").textContent = lines[1] || ""; }, 4000);
+      });
+  </script>
+
+  <!-- html2canvas 必须在 script.js 之前 -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
