@@ -74,14 +74,13 @@ function updateLocation() {
 // 4️⃣ showPage2
 async function showPage2() {
   if (imageUrls.length) {
-    const url     = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-    const dataURL = await toDataURL(url);              // ← 先转 Base64
-    document.getElementById('bg-img').src = dataURL;
-    card.style.backgroundImage  = `url('${dataURL}')`;
-    card.style.backgroundSize   = '100% auto';
-    card.style.backgroundPosition = 'top center';
-    card.style.backgroundRepeat = 'no-repeat';
-  }
+    const url  = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    const card = document.getElementById("card");    // ← 一行搞定
+    card.style.backgroundImage   = `url('${url}')`;
+    card.style.backgroundSize    = '100% auto';
+    card.style.backgroundPosition= 'top center';
+    card.style.backgroundRepeat  = 'no-repeat';
+ }
 
   // 阿拉伯文案 + 标点修正
   if (arabicTexts.length) {
