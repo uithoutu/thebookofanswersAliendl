@@ -1,12 +1,11 @@
 // ========= script.js =========
-
 // —— 0️⃣ （可选）拦截 ?share=DataURL —— 
 (function handleShareParam(){
   const p = new URLSearchParams(location.search);
   if (p.has('share')) {
-    document.body.innerHTML = `
+    document.body.innerHTML = 
       <img src="${p.get('share')}" style="display:block;width:100%;height:auto;margin:0" />
-    `;
+    ;
     return;  // 彻底停止后面所有脚本
   }
 })();
@@ -48,7 +47,7 @@ function updateDateTime() {
 function updateLocation() {
   if (!navigator.geolocation) return infoLoc.textContent = "Unavailable";
   navigator.geolocation.getCurrentPosition(
-    p => infoLoc.textContent = `${p.coords.latitude.toFixed(2)},${p.coords.longitude.toFixed(2)}`,
+    p => infoLoc.textContent = ${p.coords.latitude.toFixed(2)},${p.coords.longitude.toFixed(2)},
     () => infoLoc.textContent = "Unavailable"
   );
 }
@@ -65,7 +64,7 @@ async function showPage2(){
       rd.readAsDataURL(blob);
     });
     Object.assign(card.style, {
-      backgroundImage:`url('${dataURL}')`,
+      backgroundImage:url('${dataURL}'),
       backgroundSize:   '100% auto',
       backgroundPosition:'top center',
       backgroundRepeat: 'no-repeat'
@@ -116,7 +115,7 @@ async function downloadCurrent() {
 
   // 1️⃣ 找到背景 URL
   const cardClone = clone.querySelector("#card");
-  // backgroundImage 格式是 `url("data:...")`
+  // backgroundImage 格式是 url("data:...")
   const bgCSS = getComputedStyle(cardClone).backgroundImage;
   const bgURL = bgCSS.slice(5, -2);
 
@@ -139,8 +138,8 @@ Object.assign(infoClone.style, {
   position: "absolute",
   bottom:   "5vh",     // ← 改这里
   top:      "auto",
-  left:     `${left}px`,
-  width:    `${width}px`
+  left:     ${left}px,
+  width:    ${width}px
 });
 
 // —— 保持 answer-text 原位 —— 
@@ -148,10 +147,10 @@ const textClone = clone.querySelector("#answer-text");
 const textOrig  = document.getElementById("answer-text").getBoundingClientRect();
 Object.assign(textClone.style, {
   position:  "absolute",
-  top:       `${textOrig.top}px`,
-  left:      `${textOrig.left}px`,
+  top:       ${textOrig.top}px,
+  left:      ${textOrig.left}px,
   transform: "none",
-  width:     `${textOrig.width}px`
+  width:     ${textOrig.width}px
 });
 
 // —— 水印依旧用原来的 top 定位 —— 
@@ -159,10 +158,10 @@ const wmClone = clone.querySelector("#watermark-img");
 const wmOrig  = document.getElementById("watermark-img").getBoundingClientRect();
 Object.assign(wmClone.style, {
   position:  "absolute",
-  top:       `${wmOrig.top}px`,   // ← 还原成 top 定位
-  left:      `${wmOrig.left}px`,
+  top:       ${wmOrig.top}px,   // ← 还原成 top 定位
+  left:      ${wmOrig.left}px,
   transform: "none",
-  width:     `${wmOrig.width}px`
+  width:     ${wmOrig.width}px
 });
 
 
