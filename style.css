@@ -1,3 +1,8 @@
+/* —— 全局彻底屏蔽 iOS tap-highlight —— */
+* {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
 /* iOS tap-highlight & active background removal */
 img,
 .btn,
