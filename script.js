@@ -47,12 +47,6 @@ const btnVisit      = document.getElementById("visit-button");
   const u = btn.dataset.pressed;
   if (u) new Image().src = u;
 });
-// —— 阻止 iOS 点按高亮 & 手动触发 click —— 
-[btnDownload,btnRegenerate,btnVisit,
- ...document.querySelectorAll('#info-bar .frame')].forEach(el => {
-  el.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
-  el.addEventListener('touchend', e => { e.preventDefault(); el.click(); });
-});
 
 // —— 时间/地点 更新 —— 
 function updateDateTime() {
