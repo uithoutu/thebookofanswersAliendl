@@ -102,10 +102,9 @@ btnRegenerate.addEventListener("click",()=>location.reload());
 btnVisit.addEventListener("click",()=>window.open("https://aliendl.com","_blank"));
 btnDownload.addEventListener("click",downloadCurrent);
 
-async function downloadCurrent(){
-  const orig = page2;
-  // 1️⃣ 深度克隆并移出视口
-  const clone = orig.cloneNode(true);
+async function downloadCurrent() {
+  const orig   = page2;
+  const clone  = orig.cloneNode(true);
   document.body.appendChild(clone);
   Object.assign(clone.style, {
     position: "absolute",
@@ -115,13 +114,25 @@ async function downloadCurrent(){
     overflow: "visible"
   });
 
-  // 2️⃣ 计算克隆体总高度（包含 info-bar + card + 文案 + 水印）
-  const fullH = clone.scrollHeight;
-  // 同步把 card 和 clone 撑开到这个高度
-  clone.querySelector("#card").style.height = fullH + "px";
-  clone.style.height                         = fullH + "px";
+  // 1️⃣ 找到背景 URL
+  const cardClone = clone.querySelector("#card");
+  // backgroundImage 格式是 `url("data:...")`
+  const bgCSS = getComputedStyle(cardClone).backgroundImage;
+  const bgURL = bgCSS.slice(5, -2);
 
-  // 3️⃣ 调整 info-bar、answer-text、水印 等的定位（不变）
+  // 2️⃣ 异步加载图片，拿到 naturalWidth/naturalHeight
+  const img = new Image();
+  img.src = bgURL;
+  await img.decode();
+
+  // 3️⃣ 计算背景在当前宽度下的真实高度
+  const bgH = clone.clientWidth * img.naturalHeight / img.naturalWidth;
+
+  // 4️⃣ 应用这个高度到 card 和 clone
+  cardClone.style.height = bgH + "px";
+  clone.style.height     = bgH + "px";
+
+  // 5️⃣ 把 info-bar、文案、水印 绝对定位到底部或原位（维持你原本的逻辑）
   const infoClone = clone.querySelector("#info-bar");
   const { left, width } = document.getElementById("info-bar").getBoundingClientRect();
   Object.assign(infoClone.style, {
@@ -131,8 +142,8 @@ async function downloadCurrent(){
     left:     `${left}px`,
     width:    `${width}px`
   });
-  ["answer-text","watermark-img"].forEach(id => {
-    const eC = clone.querySelector("#"+id);
+  ["answer-text", "watermark-img"].forEach(id => {
+    const eC = clone.querySelector("#" + id);
     const r  = document.getElementById(id).getBoundingClientRect();
     Object.assign(eC.style, {
       position:  "absolute",
@@ -143,18 +154,18 @@ async function downloadCurrent(){
     });
   });
 
-  // 4️⃣ 离屏截图：注意传入 height = fullH
+  // 6️⃣ 离屏截图：注意 height 用 bgH
   const canvas = await html2canvas(clone, {
     useCORS: true,
     scale:   (devicePixelRatio || 1) * 1.5,
     width:   clone.clientWidth,
-    height:  fullH
+    height:  bgH
   });
 
-  // 5️⃣ 清理克隆体
+  // 7️⃣ 清理离屏 clone
   document.body.removeChild(clone);
 
-  // 6️⃣ 分享或展示
+  // 8️⃣ 分享或展示
   canvas.toBlob(async blob => {
     const file = new File([blob], "aliendl-answer.png", { type: "image/png" });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
