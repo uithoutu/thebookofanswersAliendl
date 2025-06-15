@@ -104,53 +104,73 @@ btnDownload.addEventListener("click",downloadCurrent);
 
 async function downloadCurrent(){
   const orig = page2;
+  // 1️⃣ 深度克隆并移出视口
   const clone = orig.cloneNode(true);
   document.body.appendChild(clone);
-  Object.assign(clone.style,{
-    position:"absolute",top:"-9999px",left:"-9999px",
-    width:orig.clientWidth+"px",overflow:"visible"
+  Object.assign(clone.style, {
+    position: "absolute",
+    top:      "-9999px",
+    left:     "-9999px",
+    width:    orig.clientWidth + "px",
+    overflow: "visible"
   });
-  const cardClone = clone.querySelector("#card");
-  const fullH     = cardClone.scrollHeight;
-  cardClone.style.height = fullH+"px";
-  clone.style.height = fullH+"px";
 
+  // 2️⃣ 计算克隆体总高度（包含 info-bar + card + 文案 + 水印）
+  const fullH = clone.scrollHeight;
+  // 同步把 card 和 clone 撑开到这个高度
+  clone.querySelector("#card").style.height = fullH + "px";
+  clone.style.height                         = fullH + "px";
+
+  // 3️⃣ 调整 info-bar、answer-text、水印 等的定位（不变）
   const infoClone = clone.querySelector("#info-bar");
-  const {left, width} = document.getElementById("info-bar").getBoundingClientRect();
-  Object.assign(infoClone.style,{
-    position:"absolute",bottom:"0",top:"auto",
-    left:`${left}px`,width:`${width}px`
+  const { left, width } = document.getElementById("info-bar").getBoundingClientRect();
+  Object.assign(infoClone.style, {
+    position: "absolute",
+    bottom:   "0",
+    top:      "auto",
+    left:     `${left}px`,
+    width:    `${width}px`
   });
-  ["answer-text","watermark-img"].forEach(id=>{
+  ["answer-text","watermark-img"].forEach(id => {
     const eC = clone.querySelector("#"+id);
     const r  = document.getElementById(id).getBoundingClientRect();
-    Object.assign(eC.style,{
-      position:"absolute",top:r.top+"px",left:r.left+"px",
-      transform:"none",width:r.width+"px"
+    Object.assign(eC.style, {
+      position:  "absolute",
+      top:       `${r.top}px`,
+      left:      `${r.left}px`,
+      transform: "none",
+      width:     `${r.width}px`
     });
   });
 
-  const canvas = await html2canvas(clone,{
-    useCORS:true,scale:(devicePixelRatio||1)*1.5,
-    width:clone.clientWidth,height:fullH
+  // 4️⃣ 离屏截图：注意传入 height = fullH
+  const canvas = await html2canvas(clone, {
+    useCORS: true,
+    scale:   (devicePixelRatio || 1) * 1.5,
+    width:   clone.clientWidth,
+    height:  fullH
   });
+
+  // 5️⃣ 清理克隆体
   document.body.removeChild(clone);
 
-  canvas.toBlob(async blob=>{
-    const file = new File([blob],"aliendl-answer.png",{type:"image/png"});
-    if (navigator.canShare&&navigator.canShare({files:[file]})){
-      try{ await navigator.share({
-          files:[file],
-          title:"Aliendl 答案卡",
-          text:"这是我的 Aliendl 回应，长按图片保存。"
+  // 6️⃣ 分享或展示
+  canvas.toBlob(async blob => {
+    const file = new File([blob], "aliendl-answer.png", { type: "image/png" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: "Aliendl 答案卡",
+          text:  "这是我的 Aliendl 回应，长按图片保存。"
         });
-      }catch(e){
+      } catch (e) {
         console.warn(e);
       }
-    }else{
-      const rd=new FileReader();
-      rd.onloadend=()=>window.open(rd.result,"_blank");
+    } else {
+      const rd = new FileReader();
+      rd.onloadend = () => window.open(rd.result, "_blank");
       rd.readAsDataURL(blob);
     }
-  },"image/png");
+  }, "image/png");
 }
