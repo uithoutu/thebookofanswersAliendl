@@ -10,28 +10,25 @@
   }
 })();
 
-// —— 修正阿拉伯标点 —— 
-function fixArabicPunctuation(text){
+// —— ① 阿拉伯标点修正 —— 
+function fixArabicPunctuation(text) {
   return text
     .replace(/\./g, '\u06D4')
-    .replace(/[\u2013\u2014]/g, m => '\u200F'+m);
+    .replace(/[\u2013\u2014]/g, m => '\u200F' + m);
 }
 
-// —— 读取文案 & 图片列表 —— 
+// —— 文本/图片数据加载 —— 
 let page1Hints = [];
 fetch("texts/page1_hint.txt")
-  .then(r=>r.text())
-  .then(t=>page1Hints = t.trim().split("\n"));
-
+  .then(r => r.text())
+  .then(t => page1Hints = t.trim().split("\n"));
 let imageUrls = [], arabicTexts = [];
-fetch("texts/image_urls.json")
-  .then(r=>r.json())
-  .then(a=> imageUrls = a);
+fetch("texts/image_urls.json").then(r => r.json()).then(a => imageUrls = a);
 fetch("texts/arabic_texts.json")
-  .then(r=>r.json())
-  .then(a=> arabicTexts = a.map(s=>s.replace(/^\d+\.\s*/,"").trim()));
+  .then(r => r.json())
+  .then(a => arabicTexts = a.map(s => s.replace(/^\d+\.\s*/, "").trim()));
 
-// —— 拿到 DOM 元素 —— 
+// —— 获取 DOM 元素 —— 
 const card       = document.getElementById("card");
 const page1      = document.getElementById("page1");
 const page2      = document.getElementById("page2");
@@ -46,142 +43,96 @@ const btnRegenerate = document.getElementById("regenerate-button");
 const btnVisit      = document.getElementById("visit-button");
 
 // —— 预加载 pressed 图 —— 
-[btnDownload,btnRegenerate,btnVisit].forEach(btn=>{
-  const u=btn.dataset.pressed;
-  if(u) new Image().src=u;
+[btnDownload, btnRegenerate, btnVisit].forEach(btn => {
+  const u = btn.dataset.pressed;
+  if (u) new Image().src = u;
 });
 // —— 阻止 iOS 点按高亮 & 手动触发 click —— 
 [btnDownload,btnRegenerate,btnVisit,
- ...document.querySelectorAll('#info-bar .frame')].forEach(el=>{
-  el.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
-  el.addEventListener('touchend',e=>{
-    e.preventDefault();
-    el.click();
-  });
+ ...document.querySelectorAll('#info-bar .frame')].forEach(el => {
+  el.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+  el.addEventListener('touchend', e => { e.preventDefault(); el.click(); });
 });
 
-// —— 更新时间&位置 —— 
-function updateDateTime(){
-  const n=new Date();
-  infoTime.textContent = n.toLocaleTimeString("en-GB",
-    {hour:"2-digit",minute:"2-digit",hour12:false});
-  infoDate.textContent = n.toLocaleDateString("en-GB",
-    {year:"numeric",month:"2-digit",day:"2-digit"});
+// —— 时间/地点 更新 —— 
+function updateDateTime() {
+  const n = new Date();
+  infoTime.textContent = n.toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit", hour12:false});
+  infoDate.textContent = n.toLocaleDateString("en-GB", {year:"numeric", month:"2-digit", day:"2-digit"});
 }
-function updateLocation(){
-  if(!navigator.geolocation) return infoLoc.textContent="Unavailable";
+function updateLocation() {
+  if (!navigator.geolocation) { infoLoc.textContent = "Unavailable"; return; }
   navigator.geolocation.getCurrentPosition(
-    p=>infoLoc.textContent=
-       `${p.coords.latitude.toFixed(2)},${p.coords.longitude.toFixed(2)}`,
-    ()=>infoLoc.textContent="Unavailable"
+    p => infoLoc.textContent = `${p.coords.latitude.toFixed(2)},${p.coords.longitude.toFixed(2)}`,
+    () => infoLoc.textContent = "Unavailable"
   );
 }
 
-// —— 切换到 Page2, 加载背景+文案 —— 
-async function showPage2(){
-  if(imageUrls.length){
+// —— showPage2 —— 
+async function showPage2() {
+  if (imageUrls.length) {
     const url = imageUrls[Math.floor(Math.random()*imageUrls.length)];
     const resp = await fetch(url);
     const blob = await resp.blob();
-    const dataURL = await new Promise(r=>{
-      const rd=new FileReader();
-      rd.onloadend = ()=>r(rd.result);
-      rd.readAsDataURL(blob);
-    });
-    Object.assign(card.style,{
-      backgroundImage:`url('${dataURL}')`,
-      backgroundSize:'100% auto',
-      backgroundPosition:'top center',
-      backgroundRepeat:'no-repeat'
-    });
+    const dataURL = await new Promise(r => { const rd = new FileReader(); rd.onloadend = ()=>r(rd.result); rd.readAsDataURL(blob); });
+    Object.assign(card.style, { backgroundImage:`url('${dataURL}')`, backgroundSize:'100% auto', backgroundPosition:'top center', backgroundRepeat:'no-repeat' });
   }
-  if(arabicTexts.length){
-    const raw=arabicTexts[Math.floor(Math.random()*arabicTexts.length)];
+  if (arabicTexts.length) {
+    const raw = arabicTexts[Math.floor(Math.random()*arabicTexts.length)];
     answerText.textContent = fixArabicPunctuation(raw);
   }
   updateDateTime();
   updateLocation();
-  page1.style.display="none";
-  page2.style.display="block";
-  requestAnimationFrame(()=>page2.classList.add("show"));
+  page1.style.display = "none";
+  page2.style.display = "block";
+  requestAnimationFrame(() => page2.classList.add("show"));
 }
 
-// —— Page1 加载动画 + 提示文字 —— 
-window.addEventListener("load",()=>{
-  setTimeout(()=>{
+// —— Page1 加载与跳转 —— 
+window.addEventListener("load", () => {
+  setTimeout(() => {
     hint1.textContent = fixArabicPunctuation(page1Hints[0]||"");
     hint2.textContent = fixArabicPunctuation(page1Hints[1]||"");
     document.getElementById("center-wrapper").classList.add("fade-in-load");
     hint1.classList.add("fade-in-load");
     hint2.classList.add("fade-in-load");
-    setTimeout(showPage2,7000);
-  },1500);
+    setTimeout(showPage2, 7000);
+  }, 1500);
 });
 
 // —— 按钮功能 —— 
-btnRegenerate.addEventListener("click",()=>location.reload());
-btnVisit.addEventListener("click",()=>window.open("https://aliendl.com","_blank"));
-btnDownload.addEventListener("click",downloadCurrent);
+btnRegenerate.addEventListener("click", () => location.reload());
+btnVisit.addEventListener("click", () => window.open("https://aliendl.com","_blank"));
+btnDownload.addEventListener("click", downloadCurrent);
 
-// —— 下载并分享完整 9:16 长图 —— 
-async function downloadCurrent(){
-  // 深度克隆
-  const clone=page2.cloneNode(true);
+// —— downloadCurrent —— 
+async function downloadCurrent() {
+  const clone = page2.cloneNode(true);
   document.body.appendChild(clone);
-  Object.assign(clone.style,{
-    position:"absolute",top:"-9999px",left:"-9999px",
-    width:page2.clientWidth+"px",overflow:"visible"
-  });
-
-  // 取背景 dataURL 并加载
-  const cardClone=clone.querySelector("#card");
-  const bgCSS=getComputedStyle(cardClone).backgroundImage;
-  const bgURL=bgCSS.slice(5,-2);
-  const img=new Image(); img.src=bgURL; await img.decode();
-
-  // 计算 9:16 高度并应用
+  Object.assign(clone.style,{ position:"absolute", top:"-9999px", left:"-9999px", width:page2.clientWidth+"px", overflow:"visible" });
+  const cardClone = clone.querySelector("#card");
+  const bgCSS = getComputedStyle(cardClone).backgroundImage;
+  const bgURL = bgCSS.slice(5, -2);
+  const img = new Image(); img.src = bgURL; await img.decode();
   const bgH = clone.clientWidth * img.naturalHeight / img.naturalWidth;
-  cardClone.style.height=bgH+"px";
-  clone.style.height=bgH+"px";
-
-  // info-bar 贴底+5vh
-  const infoClone=clone.querySelector("#info-bar");
-  const {left,width}=document.getElementById("info-bar").getBoundingClientRect();
-  Object.assign(infoClone.style,{
-    position:"absolute",bottom:"5vh",top:"auto",
-    left:`${left}px`,width:`${width}px`
-  });
-
-  // 文案&水印原位
+  cardClone.style.height = bgH+"px"; clone.style.height = bgH+"px";
+  const infoClone = clone.querySelector("#info-bar");
+  const {left,width} = document.getElementById("info-bar").getBoundingClientRect();
+  Object.assign(infoClone.style,{ position:"absolute", bottom:"5vh", top:"auto", left:`${left}px`, width:`${width}px` });
   ["answer-text","watermark-img"].forEach(id=>{
-    const eC=clone.querySelector("#"+id);
-    const r=document.getElementById(id).getBoundingClientRect();
-    Object.assign(eC.style,{
-      position:"absolute",
-      top:`${r.top}px`,left:`${r.left}px`,
-      transform:"none",width:`${r.width}px`
-    });
+    const eC = clone.querySelector("#"+id);
+    const r = document.getElementById(id).getBoundingClientRect();
+    Object.assign(eC.style,{ position:"absolute", top:`${r.top}px`, left:`${r.left}px`, transform:"none", width:`${r.width}px` });
   });
-
-  // 截图
-  const canvas=await html2canvas(clone,{
-    useCORS:true,scale:(devicePixelRatio||1)*1.5,
-    width:clone.clientWidth,height:bgH
-  });
+  const canvas = await html2canvas(clone,{ useCORS:true, scale:(devicePixelRatio||1)*1.5, width:clone.clientWidth, height:bgH });
   document.body.removeChild(clone);
-
-  // 分享或打开
-  canvas.toBlob(async blob=>{
-    const file=new File([blob],"aliendl-answer.png",{type:"image/png"});
-    if(navigator.canShare&&navigator.canShare({files:[file]})){
-      try{ await navigator.share({
-        files:[file],title:"Aliendl 答案卡",
-        text:"这是我的 Aliendl 回应，长按图片保存。"
-      }); }catch(e){console.warn(e);}
-    }else{
-      const rd=new FileReader();
-      rd.onloadend=()=>window.open(rd.result,"_blank");
-      rd.readAsDataURL(blob);
+  canvas.toBlob(async blob => {
+    const file = new File([blob],"aliendl-answer.png",{type:"image/png"});
+    if (navigator.canShare&&navigator.canShare({files:[file]})){
+      try{ await navigator.share({ files:[file], title:"Aliendl 答案卡", text:"这是我的 Aliendl 回应，长按图片保存。" }); }
+      catch(e){ console.warn(e); }
+    } else {
+      const rd = new FileReader(); rd.onloadend = ()=>window.open(rd.result,"_blank"); rd.readAsDataURL(blob);
     }
   },"image/png");
 }
