@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- Page 1 -->
+  <!-- Page 1: loading -->
   <div class="page" id="page1">
     <video id="intro-video" autoplay muted loop playsinline>
       <source src="video/intro.mp4" type="video/mp4" />
@@ -33,7 +33,7 @@
             </feMerge>
           </filter>
         </defs>
-        <g transform="rotate(-90 50 50)">  
+        <g transform="rotate(-90 50 50)">
           <circle cx="50" cy="50" r="45"
                   stroke="white" stroke-width="6" fill="none"
                   stroke-linecap="round"
@@ -49,8 +49,9 @@
     </div>
   </div>
 
-  <!-- Page 2 -->
+  <!-- Page 2: 内容显示 & 操作 -->
   <div class="page" id="page2">
+    <!-- 顶部信息栏 -->
     <div id="info-bar">
       <div class="frame">
         <img id="loc-icon" src="assets/location-pin.png" alt="位置" />
@@ -63,26 +64,27 @@
         <span id="current-date">-- -- ----</span>
       </div>
     </div>
+    <!-- 背景 & 文本 & 水印 -->
     <div id="card"></div>
     <div id="answer-text" dir="rtl"></div>
-    <img id="watermark-img" src="assets/supported_by_aliendl.png" alt="Supported by Aliendl"/>
-<div id="buttons" data-html2canvas-ignore="true">
-  <button
-    id="download-button"
-    class="btn"
-    aria-label="下载">
-  </button>
-  <button
-    id="regenerate-button"
-    class="btn"
-    aria-label="重新生成">
-  </button>
-  <button
-    id="visit-button"
-    class="btn"
-    aria-label="跳转官网">
-  </button>
-</div>
+    <img id="watermark-img"
+         src="assets/supported_by_aliendl.png"
+         alt="Supported by Aliendl" />
+    <!-- 按钮组 -->
+    <div id="buttons" data-html2canvas-ignore="true">
+      <img id="download-button" class="btn"
+           src="assets/button-download.png"
+           data-pressed="assets/button-download-pressed.png"
+           alt="下载" />
+      <img id="regenerate-button" class="btn"
+           src="assets/button-regenerate.png"
+           data-pressed="assets/button-regenerate-pressed.png"
+           alt="重新生成" />
+      <img id="visit-button" class="btn"
+           src="assets/button-visit.png"
+           data-pressed="assets/button-visit-pressed.png"
+           alt="跳转官网" />
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
