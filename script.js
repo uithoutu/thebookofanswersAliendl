@@ -130,10 +130,17 @@ window.addEventListener("load", () => {
   }, 1500);
 });
 
-// —— ⑧ 按钮功能 —— 
-btnRegenerate.addEventListener("click", () => location.reload());
-btnVisit     .addEventListener("click", () => window.open("https://aliendl.com","_blank"));
-btnDownload  .addEventListener("click", downloadCurrent);
+// —— 按钮功能 —— 
+ btnRegenerate.addEventListener("click", () => location.reload());
+ btnVisit    .addEventListener("click", () => window.open("https://aliendl.com","_blank"));
+ 
+ // —— 下载要用 RAF 延迟调用，保证按钮按下态流畅 —— 
+ btnDownload.addEventListener("click", () => {
+   requestAnimationFrame(() => {
+     requestAnimationFrame(downloadCurrent);
+   });
+ });
+
 
 // —— 9️⃣ 下载/分享截屏 —— 
 async function downloadCurrent() {
