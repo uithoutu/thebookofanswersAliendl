@@ -164,6 +164,8 @@ body {
               0 0 4px white;
   opacity:0;
   animation:fadeInAnswer 3s forwards;
+  unicode-bidi: isolate-override;
+  white-space: pre-wrap;
 }
 @keyframes fadeInAnswer { to { opacity:1; } }
 
