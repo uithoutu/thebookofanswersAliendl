@@ -132,37 +132,38 @@ async function downloadCurrent() {
   cardClone.style.height = bgH + "px";
   clone.style.height     = bgH + "px";
 
-  // 5️⃣ 把 info-bar、文案、水印 绝对定位到底部或原位（维持你原本的逻辑）
-  const infoClone = clone.querySelector("#info-bar");
-  const { left, width } = document.getElementById("info-bar").getBoundingClientRect();
-  Object.assign(infoClone.style, {
-    position: "absolute",
-    bottom:   "0",
-    top:      "auto",
-    left:     `${left}px`,
-    width:    `${width}px`
-  });
-  // 保持 answer-text 原位
-  const textClone = clone.querySelector("#answer-text");
-  const textOrig  = document.getElementById("answer-text").getBoundingClientRect();
-  Object.assign(textClone.style, {
-    position:  "absolute",
-    top:       `${textOrig.top}px`,
-    left:      `${textOrig.left}px`,
-    transform: "none",
-    width:     `${textOrig.width}px`
-  });
+// —— 5️⃣ 调整 info-bar 贴底 +5vh —— 
+const infoClone = clone.querySelector("#info-bar");
+const { left, width } = document.getElementById("info-bar").getBoundingClientRect();
+Object.assign(infoClone.style, {
+  position: "absolute",
+  bottom:   "5vh",     // ← 改这里
+  top:      "auto",
+  left:     `${left}px`,
+  width:    `${width}px`
+});
 
-  // 把水印贴到底部再上移 5vh
-  const wmClone = clone.querySelector("#watermark-img");
-  const wmOrig  = document.getElementById("watermark-img").getBoundingClientRect();
-  Object.assign(wmClone.style, {
-    position:  "absolute",
-    bottom:    "5vh",
-    top:       "auto",
-    left:      `${wmOrig.left}px`,
-    width:     `${wmOrig.width}px`
-  });
+// —— 保持 answer-text 原位 —— 
+const textClone = clone.querySelector("#answer-text");
+const textOrig  = document.getElementById("answer-text").getBoundingClientRect();
+Object.assign(textClone.style, {
+  position:  "absolute",
+  top:       `${textOrig.top}px`,
+  left:      `${textOrig.left}px`,
+  transform: "none",
+  width:     `${textOrig.width}px`
+});
+
+// —— 水印依旧用原来的 top 定位 —— 
+const wmClone = clone.querySelector("#watermark-img");
+const wmOrig  = document.getElementById("watermark-img").getBoundingClientRect();
+Object.assign(wmClone.style, {
+  position:  "absolute",
+  top:       `${wmOrig.top}px`,   // ← 还原成 top 定位
+  left:      `${wmOrig.left}px`,
+  transform: "none",
+  width:     `${wmOrig.width}px`
+});
 
 
   // 6️⃣ 离屏截图：注意 height 用 bgH
