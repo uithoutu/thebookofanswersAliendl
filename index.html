@@ -66,17 +66,23 @@
     <div id="card"></div>
     <div id="answer-text" dir="rtl"></div>
     <img id="watermark-img" src="assets/supported_by_aliendl.png" alt="Supported by Aliendl"/>
-    <div id="buttons" data-html2canvas-ignore="true">
-      <img id="download-button" class="btn"
-           src="assets/button-download.png"
-           data-pressed="assets/button-download-pressed.png" alt="下载"/>
-      <img id="regenerate-button" class="btn"
-           src="assets/button-regenerate.png"
-           data-pressed="assets/button-regenerate-pressed.png" alt="重新生成"/>
-      <img id="visit-button" class="btn"
-           src="assets/button-visit.png"
-           data-pressed="assets/button-visit-pressed.png" alt="跳转官网"/>
-    </div>
+<div id="buttons" data-html2canvas-ignore="true">
+  <button
+    id="download-button"
+    class="btn"
+    aria-label="下载">
+  </button>
+  <button
+    id="regenerate-button"
+    class="btn"
+    aria-label="重新生成">
+  </button>
+  <button
+    id="visit-button"
+    class="btn"
+    aria-label="跳转官网">
+  </button>
+</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
