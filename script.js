@@ -36,7 +36,7 @@ let preRenderedFile = null;
 function fixArabicPunctuation(text) {
   return text
     .replace(/\./g, '\u06D4')
-    .replace(/[\u2013\u2014]/g, m => '\u200F' + m);
+    .replace(/[\u2013\u2014]/g, m => '\u200F' + m + '\u200F');
 }
 
 // —— 4️⃣ 文本/图片数据加载 ——
