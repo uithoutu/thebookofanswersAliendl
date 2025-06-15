@@ -137,8 +137,7 @@ btnDownload.addEventListener("click", downloadCurrent);
 // 7️⃣ 所见即所得截图下载
 async function downloadCurrent() {
   const origPage2 = document.getElementById("page2");
-
-  // 1️⃣ 深度克隆 page2，并移出视口
+  // 1️⃣ 深度克隆并离屏
   const clone = origPage2.cloneNode(true);
   document.body.appendChild(clone);
   Object.assign(clone.style, {
@@ -151,32 +150,29 @@ async function downloadCurrent() {
     pointerEvents: "none",
   });
 
-  // 2️⃣ 展开背景容器到全高
+  // 2️⃣ 展开到背景全高
   const cardClone = clone.querySelector("#card");
   const fullH     = cardClone.scrollHeight;
   cardClone.style.height    = fullH + "px";
   cardClone.style.overflowY = "visible";
   clone.style.height        = fullH + "px";
 
-  // 3️⃣ 在克隆体中，把 fixed 元素改为 absolute
-  // — info-bar 貼到底部 —
+  // 3️⃣ info-bar 贴底，其他 fixed 元素绝对定位（同你现有逻辑）
   const infoClone = clone.querySelector("#info-bar");
   const origInfo  = document.getElementById("info-bar");
   const { left: infoL, width: infoW } = origInfo.getBoundingClientRect();
   Object.assign(infoClone.style, {
     position: "absolute",
-    bottom:   "5vh",
+    bottom:   "0",
     top:      "auto",
     left:     `${infoL}px`,
     width:    `${infoW}px`
   });
-
-  // — 其余保持原位 —
-  ["answer-text", "watermark-img"].forEach(id => {
-    const elClone = clone.querySelector(`#${id}`);
-    const elOrig  = document.getElementById(id);
-    const { top, left, width } = elOrig.getBoundingClientRect();
-    Object.assign(elClone.style, {
+  ["answer-text","watermark-img"].forEach(id => {
+    const elC = clone.querySelector("#"+id);
+    const elO = document.getElementById(id);
+    const { top,left,width } = elO.getBoundingClientRect();
+    Object.assign(elC.style, {
       position:  "absolute",
       top:       `${top}px`,
       left:      `${left}px`,
@@ -185,42 +181,37 @@ async function downloadCurrent() {
     });
   });
 
-  // 4️⃣ 离屏截图
+  // 4️⃣ 截图
   const canvas = await html2canvas(clone, {
     useCORS: true,
-    scale:   (window.devicePixelRatio || 1) * 1.5,
+    scale:   (window.devicePixelRatio||1)*1.5,
     width:   clone.clientWidth,
     height:  fullH
   });
 
-// 5️⃣ 清理并导出改为：Web Share API 分享文件，fallback 新标签展示
-document.body.removeChild(clone);
-canvas.toBlob(async blob => {
-  // 1️⃣ 先把 blob 包装成一个 File
-  const file = new File([blob], 'aliendl-answer.png', { type: 'image/png' });
+  // 5️⃣ 清理离屏 clone
+  document.body.removeChild(clone);
 
-  // 2️⃣ 如果浏览器支持分享文件，就直接调用系统分享面板
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-        title: 'Aliendl 答案卡',
-        text: '这是我的 Aliendl 回应，长按图片可保存。',
-      });
-      return;
-    } catch (e) {
-      // 用户取消或分享失败，继续走 fallback
+  // 6️⃣ 分享文件（仅调用一次原生分享）
+  canvas.toBlob(async blob => {
+    const file = new File([blob], 'aliendl-answer.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: 'Aliendl 答案卡',
+          text:  '这是我的 Aliendl 回应，长按图片保存。',
+        });
+      } catch (e) {
+        console.warn('用户取消分享或发生错误', e);
+      }
+    } else {
+      // 如果浏览器不支持分享文件，则打开新标签展示图片
+      const reader = new FileReader();
+      reader.onloadend = () => window.open(reader.result, '_blank');
+      reader.readAsDataURL(blob);
     }
-  }
-
-  // 3️⃣ fallback：在新标签打开图片，用户再长按「保存图像」
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    window.open(reader.result, '_blank');
-  };
-  reader.readAsDataURL(blob);
-}, 'image/png');
-
-
+  }, 'image/png');
+}
 
 // ========= 脚本结束 =========
