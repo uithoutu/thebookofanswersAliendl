@@ -1,5 +1,14 @@
 // ========= script.js =========
 
+// 放在脚本最顶部，btnDownload/btnRegenerate/btnVisit 获取之后
+[btnDownload, btnRegenerate, btnVisit].forEach(btn => {
+  const url = btn.dataset.pressed;
+  if (url) {
+    const img = new Image();
+    img.src = url;  // 浏览器开始下载并缓存这张 pressed 图
+  }
+});
+
 // —— 0️⃣ （可选）拦截 ?share=DataURL —— 
 (function handleShareParam(){
   const p = new URLSearchParams(location.search);
