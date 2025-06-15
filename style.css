@@ -75,16 +75,17 @@ body {
 #hint2 { top: 28vh; }
 
 @keyframes fadeInText {
-  from { opacity:0; transform:translateY(10px); }
-  to   { opacity:1; transform:translateY(0); }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
   
-  /* 第一行淡入：从 0.3s 开始，时长 1s */
-.fade-in-text-1 {
+  /* 第一行淡入：从 0.5s 开始，时长 6s */
+#hint1.fade-in-load {
   animation: fadeInText 6s ease-out 0.5s forwards;
 }
 
-/* 第二行淡入：从 2s 开始，时长 1s */
-.fade-in-text-2 {
+/* 第二行淡入：从 2.5s 开始，时长 6s */
+#hint2.fade-in-load {
   animation: fadeInText 6s ease-out 2.5s forwards;
 }
 
