@@ -66,7 +66,7 @@ body {
   text-shadow:0 0 4px white;
   opacity:0; z-index:3;
 }
-#hint1 { top:22vh; animation: fadeInText 6s 1s forwards; }
+#hint1 { top:22vh; animation: fadeInText 6s 0.3s forwards; }
 #hint2 { top:28vh; animation: fadeInText 6s 4s forwards; }
 @keyframes fadeInText {
   from { opacity:0; transform:translateY(10px); }
