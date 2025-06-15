@@ -1,8 +1,16 @@
 // ========= 脚本开始 =========
 
-// —— ① 阿拉伯标点修正函数 ——
-// 把英文句号 . → 阿拉伯句号 U+06D4“۔”
-// 并在所有破折号 (– 或 —) 前插入 RLM (U+200F)，保证断行时它粘到行首（右侧）
+// —— 0️⃣ 处理 ?share=DataURL 参数 —— 
+(function handleShareParam(){
+  const params = new URLSearchParams(location.search);
+  if (params.has('share')) {
+    document.body.innerHTML = `
+      <img src="${params.get('share')}" 
+           style="width:100%;height:auto;display:block;margin:0 auto;" />
+    `;
+  }
+})();
+
 function fixArabicPunctuation(text) {
   return text
     .replace(/\./g, '\u06D4')
@@ -185,16 +193,37 @@ async function downloadCurrent() {
     height:  fullH
   });
 
-  // 5️⃣ 清理并导出
-  document.body.removeChild(clone);
-  canvas.toBlob(blob => {
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = 'aliendl-answer.png';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  }, 'image/png');
-}
+// 5️⃣ 清理并导出（改为 Web Share API 优先，其它浏览器回退到新标签展示）
+document.body.removeChild(clone);
+canvas.toBlob(async blob => {
+  // 转成 DataURL
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const dataURL = reader.result;
+
+    // 构造一个带 ?share=DataURL 的链接
+    const shareURL = `${location.origin + location.pathname}?share=${encodeURIComponent(dataURL)}`;
+
+    if (navigator.share) {
+      try {
+        // 优先尝试原生分享（仅在支持的移动端浏览器有效）
+        await navigator.share({
+          title: 'Aliendl 答案卡',
+          text:  '这是我的 Aliendl 回应，点击查看并长按保存。',
+          url:   shareURL
+        });
+      } catch {
+        // 如果用户取消或分享失败，就回退到新标签展示图片
+        window.open(dataURL, '_blank');
+      }
+    } else {
+      // 不支持分享 API 的浏览器，直接新标签打开图片
+      window.open(dataURL, '_blank');
+    }
+  };
+  reader.readAsDataURL(blob);
+}, 'image/png');
+
 
 
 // ========= 脚本结束 =========
