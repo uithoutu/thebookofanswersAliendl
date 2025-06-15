@@ -215,6 +215,8 @@ body {
   bottom: calc(env(safe-area-inset-bottom) + 18px);
   left: 5vw;
   right: 5vw;
+  width: 80px !important;
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
