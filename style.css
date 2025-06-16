@@ -153,20 +153,37 @@ body {
   -webkit-overflow-scrolling:touch;
   box-sizing:border-box;
 }
+
 #answer-text {
-  top:15vh; left:5vw; right:6vw;
+  position: fixed;      /* 保证它不被 #card 遮住 */
+  top:15vh; 
+  left:5vw; 
+  right:6vw;
+
   font-family:'Traditional Arabic',serif;
-  font-size:38px; line-height:57px;
+  font-size:38px; 
+  line-height:57px;
   color:white;
-  direction:rtl; text-align:right;
+  direction:rtl; 
+  text-align:right;
   -webkit-text-stroke:0.2px rgba(0,0,0,0.6);
-  text-shadow:0 0 2px rgba(0,0,0,0.4),
-              0 0 4px white;
-  opacity:0;
+  text-shadow:
+    0 0 2px rgba(0,0,0,0.4),
+    0 0 4px white;
+
+  opacity: 0;
+  animation: fadeInAnswer 3s ease-in-out forwards;
+
+  /* 如果你要保留 \n 换行，请用 pre-line */
+  white-space: pre-line;  
   unicode-bidi: isolate-override;
-  white-space: pre-wrap;
 }
-@keyframes fadeInAnswer { to { opacity:1; } }
+
+@keyframes fadeInAnswer {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 
 #watermark-img {
   top:calc(15vh + 20vh + 3vh);
