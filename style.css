@@ -60,7 +60,7 @@ body {
 .loading-hint {
   position: absolute;
   right:20px; 
-  width:calc(100%-40px);
+  width:calc(100% - 40px);
   font-family:'Traditional Arabic',serif;
   font-size:40px; 
   line-height:50px;
@@ -163,7 +163,6 @@ body {
   text-shadow:0 0 2px rgba(0,0,0,0.4),
               0 0 4px white;
   opacity:0;
-  animation:fadeInAnswer 3s forwards;
   unicode-bidi: isolate-override;
   white-space: pre-wrap;
 }
