@@ -151,13 +151,13 @@ async function showPage2() {
       width:    `${width}px`
     });
 
- // —— 文案 & 水印 绝对定位，再下移 25vh —— 
+ // —— 文案 & 水印 绝对定位，再下移 29vh —— 
  ["answer-text","watermark-img"].forEach(id => {
    const elClone = clone.querySelector("#"+id);
    const r       = document.getElementById(id).getBoundingClientRect();
    Object.assign(elClone.style, {
      position:  "absolute",
-     top:       `calc(${r.top}px + 25vh)`,
+     top:       `calc(${r.top}px + 29vh)`,
      left:      `${r.left}px`,
      transform: "none",
      width:     `${r.width}px`,
