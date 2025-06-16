@@ -160,7 +160,12 @@ async function showPage2() {
      top:       `calc(${r.top}px + 25vh)`,
      left:      `${r.left}px`,
      transform: "none",
-     width:     `${r.width}px`
+     width:     `${r.width}px`,
+      ...(id === "answer-text" ? {
+      textAlign:    "right",
+      direction:    "rtl",
+      unicodeBidi:  "isolate-override"
+    } : {})
    });
  });
 
