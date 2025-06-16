@@ -134,27 +134,35 @@ async function showPage2() {
     const bgH = clone.clientWidth * img.naturalHeight / img.naturalWidth;
     cardClone.style.height = bgH + "px";
     clone.style.height     = bgH + "px";
+    
+// 想要的偏移量
+const textOffset   = 20;      // 文案和水印下移 20px
+const watermarkOffset = 20;
+const infoOffset   = 18;      // info-bar 再往上移 10px
 
-    // info-bar 底部 +5vh
-    const infoClone = clone.querySelector("#info-bar");
-    const rect = document.getElementById("info-bar").getBoundingClientRect();
-    Object.assign(infoClone.style, {
-      position:"absolute", bottom:"5vh", top:"auto",
-      left: `${rect.left}px`, width: `${rect.width}px`
-    });
+// —— info-bar 底部 +5vh 再上移 infoOffset px —— 
+Object.assign(infoClone.style, {
+  position: "absolute",
+  bottom:   `calc(5vh + ${infoOffset}px)`,
+  top:      "auto",
+  left:     `${left}px`,
+  width:    `${width}px`
+});
 
-    // 文案 + 水印 固定原位
-    ["answer-text","watermark-img"].forEach(id => {
-      const elClone = clone.querySelector(`#${id}`);
-      const r = document.getElementById(id).getBoundingClientRect();
-      Object.assign(elClone.style, {
-        position:"absolute",
-        top:    `${r.top}px`,
-        left:   `${r.left}px`,
-        transform:"none",
-        width:  `${r.width}px`
-      });
-    });
+// —— 文案 & 水印 绝对定位原位，再各自下移 —— 
+["answer-text","watermark-img"].forEach(id => {
+  const eC = clone.querySelector("#"+id);
+  const r  = document.getElementById(id).getBoundingClientRect();
+  // 根据不同 id 用不同偏移
+  const extraY = id === "answer-text" ? textOffset : watermarkOffset;
+  Object.assign(eC.style, {
+    position:  "absolute",
+    top:       `${r.top + extraY}px`,  
+    left:      `${r.left}px`,
+    transform: "none",
+    width:     `${r.width}px`
+  });
+});
 
     // 同步最新定位文字
     const realLoc = document.getElementById("current-location").textContent;
