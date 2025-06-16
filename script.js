@@ -140,24 +140,24 @@ async function showPage2() {
     cardClone.style.height = bgH + "px";
     clone.style.height     = bgH + "px";
 
-    // —— info-bar 底部上移15vh —— 
+    // —— info-bar 底部上移20vh —— 
     const infoClone = clone.querySelector("#info-bar");
     const { left, width } = document.getElementById("info-bar").getBoundingClientRect();
     Object.assign(infoClone.style, {
       position: "absolute",
-      bottom:   "15vh",
+      bottom:   "20vh",
       top:      "auto",
       left:     `${left}px`,
       width:    `${width}px`
     });
 
- // —— 文案 & 水印 绝对定位，再下移 20vh —— 
+ // —— 文案 & 水印 绝对定位，再下移 25vh —— 
  ["answer-text","watermark-img"].forEach(id => {
    const elClone = clone.querySelector("#"+id);
    const r       = document.getElementById(id).getBoundingClientRect();
    Object.assign(elClone.style, {
      position:  "absolute",
-     top:       `calc(${r.top}px + 20vh)`,
+     top:       `calc(${r.top}px + 25vh)`,
      left:      `${r.left}px`,
      transform: "none",
      width:     `${r.width}px`
