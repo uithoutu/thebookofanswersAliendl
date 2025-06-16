@@ -140,30 +140,29 @@ async function showPage2() {
     cardClone.style.height = bgH + "px";
     clone.style.height     = bgH + "px";
 
-    // —— info-bar 底部 +5vh 再上移 18px —— 
+    // —— info-bar 底部 +5vh 再上移 30px —— 
     const infoClone = clone.querySelector("#info-bar");
     const { left, width } = document.getElementById("info-bar").getBoundingClientRect();
     Object.assign(infoClone.style, {
       position: "absolute",
-      bottom:   "calc(5vh + 18px)",
+      bottom:   "30vh",
       top:      "auto",
       left:     `${left}px`,
       width:    `${width}px`
     });
 
-    // —— 文案 & 水印 绝对定位，再下移 20px —— 
-    ["answer-text","watermark-img"].forEach(id => {
-      const elClone = clone.querySelector("#"+id);
-      const r       = document.getElementById(id).getBoundingClientRect();
-      const extraY = id === "answer-text" ? 20 : 20;
-      Object.assign(elClone.style, {
-        position:  "absolute",
-        top:       `${r.top + extraY}px`,
-        left:      `${r.left}px`,
-        transform: "none",
-        width:     `${r.width}px`
-      });
-    });
+ // —— 文案 & 水印 绝对定位，再下移 25vh —— 
+ ["answer-text","watermark-img"].forEach(id => {
+   const elClone = clone.querySelector("#"+id);
+   const r       = document.getElementById(id).getBoundingClientRect();
+   Object.assign(elClone.style, {
+     position:  "absolute",
+     top:       `calc(${r.top}px + 25vh)`,
+     left:      `${r.left}px`,
+     transform: "none",
+     width:     `${r.width}px`
+   });
+ });
 
     // —— 同步最新定位文字 —— 
     const realLoc   = document.getElementById("current-location").textContent;
