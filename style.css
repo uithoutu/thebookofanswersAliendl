@@ -293,4 +293,4 @@ body {
   transition: opacity 0.3s ease-in, transform 0.3s ease-in;
   opacity: 0;
   transform: translateY(-20px);
-  transition-delay: 0s !important;
+  transition-delay: 0s !important;}
