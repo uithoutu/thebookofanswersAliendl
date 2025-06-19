@@ -265,30 +265,26 @@ async function downloadCurrent() {
 // —— 社交菜单展开／收起 —— 
 ;(function setupSocialMenu() {
   const menuToggle = document.getElementById('visit-button');
-  const buttons    = document.getElementById('buttons');
-  const ANIM_CLOSE = 1000; // ms，和 .closing transition 时长保持一致
+  const container  = document.getElementById('buttons');
+  const ANIM_CLOSE = 1000; // ms，需和 CSS 里的 .closing transition 保持一致
 
-  // —— 给按钮添加按下态 —— 
-  menuToggle.addEventListener('pointerdown', () => {
-    menuToggle.classList.add('pressed');
-  });
-  menuToggle.addEventListener('pointerup', () => {
-    menuToggle.classList.remove('pressed');
-  });
-  menuToggle.addEventListener('pointerleave', () => {
-    menuToggle.classList.remove('pressed');
-  });
+  // 主按钮按下态切换
+  menuToggle.addEventListener('pointerdown', ()  => menuToggle.classList.add('pressed'));
+  menuToggle.addEventListener('pointerup',   ()  => menuToggle.classList.remove('pressed'));
+  menuToggle.addEventListener('pointerleave',()  => menuToggle.classList.remove('pressed'));
 
-  // —— 点击打开／收起菜单 —— 
+  // 点击开／关菜单
   menuToggle.addEventListener('click', () => {
-    if (buttons.classList.contains('open')) {
-      // 从已开状态切到收起
-      buttons.classList.remove('open');
-      buttons.classList.add('closing');
-      setTimeout(() => buttons.classList.remove('closing'), ANIM_CLOSE);
+    if (container.classList.contains('open')) {
+      container.classList.remove('open');
+      container.classList.add('closing');
+      setTimeout(() => container.classList.remove('closing'), ANIM_CLOSE);
     } else {
-      // 从初始／收起状态切到打开
-      buttons.classList.add('open');
+      container.classList.add('open');
+    }
+  });
+})();
+
     }
   });
 })();
