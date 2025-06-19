@@ -70,23 +70,55 @@
     <img id="watermark-img"
          src="assets/supported_by_aliendl.png"
          alt="Supported by Aliendl" />
-    <!-- 按钮组 -->
-    <div id="buttons" data-html2canvas-ignore="true">
-      <img id="download-button" class="btn"
-           src="assets/button-download.png"
-           data-pressed="assets/button-download-pressed.png"
-           alt="下载" />
-      <img id="regenerate-button" class="btn"
-           src="assets/button-regenerate.png"
-           data-pressed="assets/button-regenerate-pressed.png"
-           alt="重新生成" />
-      <img id="visit-button" class="btn"
-           src="assets/button-visit.png"
-           data-pressed="assets/button-visit-pressed.png"
-           alt="跳转官网" />
-    </div>
-  </div>
+  <!-- 按钮组 -->
+  <div id="buttons" data-html2canvas-ignore="true">
+    <img id="download-button" class="btn"
+         src="assets/button-download.png"
+         data-pressed="assets/button-download-pressed.png"
+         alt="下载" />
+    <img id="regenerate-button" class="btn"
+         src="assets/button-regenerate.png"
+         data-pressed="assets/button-regenerate-pressed.png"
+         alt="重新生成" />
 
+    <!-- 跳转按钮 -->
+    <button
+      id="button-visit"
+      class="btn menu-toggle"
+      aria-label="打开社交菜单"
+      data-pressed="assets/button-visit-pressed.png">
+    </button>
+
+    <!-- 菜单线 -->
+    <img
+      id="menu-line"
+      class="menu-line"
+      src="assets/menu-line.png"
+      aria-hidden="true"
+      alt="" />
+
+    <!-- 五个社交图标 -->
+    <div id="menu-icons" class="menu-icons">
+      <a href="https://www.aliendl.com/"       target="_blank">
+        <img id="icon_aliendl"    class="menu-icon" src="assets/icon_aliendl.png"/>
+      </a>
+      <a href="https://www.noon.com/saudi-en/" target="_blank">
+        <img id="icon_noon"       class="menu-icon" src="assets/icon_noon.png"/>
+      </a>
+      <a href="https://snapchat.com/…"         target="_blank">
+        <img id="icon_snapchat"  class="menu-icon" src="assets/icon_snapchat.png"/>
+      </a>
+      <a href="https://www.tiktok.com/…"       target="_blank">
+        <img id="icon_tiktok"    class="menu-icon" src="assets/icon_tiktok.png"/>
+      </a>
+      <a href="https://www.instagram.com/…"    target="_blank">
+        <img id="icon_instagram" class="menu-icon" src="assets/icon_instagram.png"/>
+      </a>
+    </div>
+  </div> 
+</div>
+
+  <!-- 脚本 -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="script.js" defer></script>
 </body>
