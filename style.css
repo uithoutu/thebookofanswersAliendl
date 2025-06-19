@@ -209,3 +209,88 @@ body {
 /* Page2 显示切换 */
 #page2 { display:none; opacity:0; transition:opacity 1s; }
 #page2.show { display:block; opacity:1; }
+
+/* 让 #buttons 成为定位容器 */
+#buttons {
+  position: relative;
+}
+
+/* 按钮本身居底部水平居中 */
+.btn.menu-toggle {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 18px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: auto;
+  background: url("assets/button-visit.png") no-repeat center/contain;
+  border: none;
+  padding: 0;
+}
+
+/* 按下态 */
+.btn.menu-toggle.pressed {
+  background-image: url("assets/button-visit-pressed.png");
+}
+
+/* 菜单线，从按钮正上方开始向上展开 */
+.menu-line {
+  position: absolute;
+  /* 按钮底部 + 半个按钮高度，即线条起点在按钮中心 */
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 40px);
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 1.5s ease-in-out, opacity 1.5s;
+  width: 1px;
+  height: 320px;     /* 你要的线条长度 */
+  opacity: 0;
+}
+
+/* 图标容器，同样起点在按钮中心 */
+.menu-icons {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* 各个社交图标 */
+.menu-icon {
+  display: block;
+  width: 45px;
+  height: 45px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* 打开状态 */
+.open .menu-line {
+  transform: translateX(-50%) scaleY(1);
+  opacity: 1;
+}
+.open .menu-icon {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+.open .menu-icon:nth-child(1) { transition-delay: 0.3s; }
+.open .menu-icon:nth-child(2) { transition-delay: 0.6s; }
+.open .menu-icon:nth-child(3) { transition-delay: 0.9s; }
+.open .menu-icon:nth-child(4) { transition-delay: 1.2s; }
+.open .menu-icon:nth-child(5) { transition-delay: 1.5s; }
+
+/* 关闭状态 */
+.closing .menu-line {
+  transition: transform 1s ease-in-out, opacity 1s;
+  transform: translateX(-50%) scaleY(0);
+  opacity: 0;
+}
+.closing .menu-icon {
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition-delay: 0s !important;
