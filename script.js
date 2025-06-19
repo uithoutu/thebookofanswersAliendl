@@ -284,7 +284,3 @@ async function downloadCurrent() {
     }
   });
 })();
-
-    }
-  });
-})();
