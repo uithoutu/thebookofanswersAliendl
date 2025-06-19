@@ -261,3 +261,22 @@ async function downloadCurrent() {
     }
   },"image/png");
 }
+// —— 社交菜单展开／收起 —— 
+;(function setupSocialMenu() {
+  const menuToggle = document.getElementById('visit-button');
+  const buttons    = document.getElementById('buttons');
+  const ANIM_CLOSE = 1000; // ms，和 .closing transition 时长保持一致
+
+  menuToggle.addEventListener('click', () => {
+    if (buttons.classList.contains('open')) {
+      // 正在打开状态 → 切换到收起
+      buttons.classList.remove('open');
+      buttons.classList.add('closing');
+      // 收起动画做完后清理 class
+      setTimeout(() => buttons.classList.remove('closing'), ANIM_CLOSE);
+    } else {
+      // 从收起/初始状态 → 切换到打开
+      buttons.classList.add('open');
+    }
+  });
+})();
