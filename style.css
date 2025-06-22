@@ -209,91 +209,81 @@ body {
   left: 5vw;
   right: 5vw;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between;  /* 第一层级按钮左右分布 */
   align-items: center;
-  gap: 8vw;
-  /* 容器正常接收点击 */
-  pointer-events: auto;
   z-index: 3;
-}
 
-/* —— 按钮基础样式 —— */
+  /* 只让子元素响应点击 */
+  pointer-events: none;
+}
+/* —— 第一层级：下载 & 重生成 & Visit 按钮 —— */
 #buttons .btn {
   width: 80px;
-  height: 80px;           /* 显式给按钮高度，避免塌陷 */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  border: none;
-  padding: 0;
+  height: auto;
   touch-action: manipulation;
-  pointer-events: auto;   /* 恢复按钮自身的点击 */
+  pointer-events: auto;  /* 恢复按钮本身的点击 */
 }
 
-/* —— 主按钮（menu-toggle）—— */
+/* —— 主按钮（Visit），不再 absolute —— */
 .btn.menu-toggle {
-  background-image: url("assets/button-visit.png");
+  /* static 定位，由上面的 flex 布局自动放到最右 */
+  background: url("assets/button-visit.png") no-repeat center/contain;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
 .btn.menu-toggle.pressed {
   background-image: url("assets/button-visit-pressed.png");
 }
 
-/* —— 菜单连线 —— */
-#menu-line {
+/* —— 第二层级：菜单连线 —— */
+.menu-line {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 40px);
-  left: 50%;
-  transform: translateX(-50%) scaleY(0);
-  transform-origin: bottom center;
+  right: 5vw;               /* 与 Visit 按钮右对齐 */
   width: 1px;
-  height: 320px;           /* 线条总长度 */
+  height: 320px;            /* 线条总长度 */
+  transform: scaleY(0);
+  transform-origin: bottom center;
   opacity: 0;
   transition: transform 1.5s ease-in-out, opacity 1.5s;
-  pointer-events: none;    /* 线条不拦截点击 */
 }
 
-/* —— 图标容器 —— */
-#menu-icons {
+/* —— 第二层级：社交图标容器 —— */
+.menu-icons {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 40px);
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;    /* 容器本身不拦截，子图标允许 */
+  right: 5vw;               /* 与 Visit 按钮右对齐 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* 五个图标上下均分 */
+  height: 320px;                   /* 与 .menu-line 一致 */
+  pointer-events: none;            /* 初始不拦截点击，打开后图标本身会接收 */
 }
 
-/* —— 各社交图标 —— */
+/* —— 各个社交图标 —— */
 .menu-icon {
-  display: block;
-  width: 45px;
-  height: 45px;
-  margin: 0 auto;
+  width: 80px;
+  height: 80px;
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  pointer-events: auto;    /* 图标自己接收点击 */
+  pointer-events: auto;  /* 图标本身可点击 */
 }
 
 /* —— 打开状态 —— */
-#buttons.open #menu-line {
-  transform: translateX(-50%) scaleY(1);
+#buttons.open .menu-line {
+  transform: scaleY(1);
   opacity: 1;
-}
-#buttons.open #menu-icons {
-  pointer-events: none;    /* 容器依旧不拦截 */
 }
 #buttons.open .menu-icon {
   opacity: 1;
   transform: translateY(0);
 }
-#buttons.open .menu-icon:nth-child(1) { transition-delay: 0.3s; }
-#buttons.open .menu-icon:nth-child(2) { transition-delay: 0.6s; }
-#buttons.open .menu-icon:nth-child(3) { transition-delay: 0.9s; }
-#buttons.open .menu-icon:nth-child(4) { transition-delay: 1.2s; }
-#buttons.open .menu-icon:nth-child(5) { transition-delay: 1.5s; }
 
 /* —— 关闭状态 —— */
-#buttons.closing #menu-line {
-  transform: translateX(-50%) scaleY(0);
+#buttons.closing .menu-line {
+  transform: scaleY(0);
   opacity: 0;
   transition: transform 1s ease-in-out, opacity 1s;
 }
@@ -301,5 +291,5 @@ body {
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.3s ease-in, transform 0.3s ease-in;
-  transition-delay: 0s !important;
 }
+
