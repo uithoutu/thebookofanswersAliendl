@@ -210,7 +210,6 @@ window.addEventListener("load", () => {
 
 // —— 🔟 按钮功能 & 秒级分享 —— 
 btnRegenerate.addEventListener("click", () => location.reload());
-btnVisit     .addEventListener("click", () => window.open("https://aliendl.com","_blank"));
 btnDownload  .addEventListener("click", () => {
   if (preRenderedFile) {
     if (navigator.canShare && navigator.canShare({ files:[preRenderedFile] })) {
@@ -266,21 +265,16 @@ async function downloadCurrent() {
 ;(function setupSocialMenu() {
   const menuToggle = document.getElementById('visit-button');
   const container  = document.getElementById('buttons');
-  const ANIM_CLOSE = 1000; // ms，需和 CSS 里的 .closing transition 保持一致
+  const DURATION   = 1000; // 收起动画时长，和 CSS 一致
 
-  // 主按钮按下态切换
-  menuToggle.addEventListener('pointerdown', ()  => menuToggle.classList.add('pressed'));
-  menuToggle.addEventListener('pointerup',   ()  => menuToggle.classList.remove('pressed'));
-  menuToggle.addEventListener('pointerleave',()  => menuToggle.classList.remove('pressed'));
-
-  // 点击开／关菜单
   menuToggle.addEventListener('click', () => {
     if (container.classList.contains('open')) {
       container.classList.remove('open');
       container.classList.add('closing');
-      setTimeout(() => container.classList.remove('closing'), ANIM_CLOSE);
+      setTimeout(() => container.classList.remove('closing'), DURATION);
     } else {
       container.classList.add('open');
     }
   });
 })();
+
