@@ -134,7 +134,7 @@ body {
   border-radius:10px;
   box-shadow:0 0 4px rgba(255,255,255,0.4);
   font-family:'Bodoni MT',serif;
-  font-style:italic; font-size:16px;
+  font-style:normal; font-size:16px;
   color:white; gap:0.2em;
 }
 #loc-icon {
