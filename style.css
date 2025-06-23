@@ -250,7 +250,7 @@ body {
 .menu-line {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 60px);
-  right: 8.1vw;               /* 与 Visit 按钮右对齐 */
+  right: 8.2vw;               /* 与 Visit 按钮右对齐 */
   width: auto;
   height: 300px;            /* 线条总长度 */
   transform: scaleY(0);
@@ -302,11 +302,11 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
-#buttons.open .menu-icons a:nth-child(5) .menu-icon { transition-delay: 0.15s; }
-#buttons.open .menu-icons a:nth-child(4) .menu-icon { transition-delay: 0.30s; }
-#buttons.open .menu-icons a:nth-child(3) .menu-icon { transition-delay: 0.45s; }
-#buttons.open .menu-icons a:nth-child(2) .menu-icon { transition-delay: 0.60s; }
-#buttons.open .menu-icons a:nth-child(1) .menu-icon { transition-delay: 0.75s; }
+#buttons.open .menu-icons a:nth-child(5) .menu-icon { transition-delay: 0.1s; }
+#buttons.open .menu-icons a:nth-child(4) .menu-icon { transition-delay: 0.2s; }
+#buttons.open .menu-icons a:nth-child(3) .menu-icon { transition-delay: 0.3s; }
+#buttons.open .menu-icons a:nth-child(2) .menu-icon { transition-delay: 0.4s; }
+#buttons.open .menu-icons a:nth-child(1) .menu-icon { transition-delay: 0.5s; }
 
 /* —— 关闭状态 —— */
 #buttons.closing .menu-line {
