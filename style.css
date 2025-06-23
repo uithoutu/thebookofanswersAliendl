@@ -250,7 +250,7 @@ body {
 .menu-line {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 60px);
-  right: 8vw;               /* 与 Visit 按钮右对齐 */
+  right: 7.9vw;               /* 与 Visit 按钮右对齐 */
   width: auto;
   height: 320px;            /* 线条总长度 */
   transform: scaleY(0);
@@ -263,7 +263,7 @@ body {
 .menu-icons {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 75px);
-  right: 3.9vw;               /* 与 Visit 按钮右对齐 */
+  right: 3.8vw;               /* 与 Visit 按钮右对齐 */
   display: flex;
   flex-direction: column;
   justify-content: space-between;  /* 五个图标上下均分 */
@@ -275,7 +275,7 @@ body {
   width: 50px;
   height: auto;
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateY(20px);
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
   pointer-events: auto;  /* 图标本身可点击 */
 }
@@ -297,11 +297,11 @@ body {
 }
 
 /* 然后依旧保留你之前为每个图标设置的 transition-delay */
-#buttons.open .menu-icons a:nth-child(1) .menu-icon { transition-delay: 0.3s; }
-#buttons.open .menu-icons a:nth-child(2) .menu-icon { transition-delay: 0.6s; }
-#buttons.open .menu-icons a:nth-child(3) .menu-icon { transition-delay: 0.9s; }
-#buttons.open .menu-icons a:nth-child(4) .menu-icon { transition-delay: 1.2s; }
-#buttons.open .menu-icons a:nth-child(5) .menu-icon { transition-delay: 1.5s; }
+#buttons.open .menu-icons a:nth-child(1) .menu-icon { transition-delay: 0.2s; }
+#buttons.open .menu-icons a:nth-child(2) .menu-icon { transition-delay: 0.4s; }
+#buttons.open .menu-icons a:nth-child(3) .menu-icon { transition-delay: 0.6s; }
+#buttons.open .menu-icons a:nth-child(4) .menu-icon { transition-delay: 0.8s; }
+#buttons.open .menu-icons a:nth-child(5) .menu-icon { transition-delay: 1.0s; }
 
 /* —— 关闭状态 —— */
 #buttons.closing .menu-line {
@@ -312,6 +312,6 @@ body {
 #buttons.closing .menu-icon {
   opacity: 0;
   transform: translateY(-20px);
-  transition: opacity 1s ease-in, transform 1s ease-in;
+  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
 }
 
