@@ -211,7 +211,6 @@ body {
   display: flex;
   justify-content: space-between;  /* 第一层级按钮左右分布 */
   align-items: center;
-  gap: 5vw;
   z-index: 3;
 
   /* 只让子元素响应点击 */
@@ -250,25 +249,24 @@ body {
 /* —— 第二层级：菜单连线 —— */
 .menu-line {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 18px + 40px);
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 80px);
   right: 9vw;               /* 与 Visit 按钮右对齐 */
   width: auto;
   height: 320px;            /* 线条总长度 */
   transform: scaleY(0);
   transform-origin: bottom center;
   opacity: 0;
-  transition: transform 1.5s ease-in-out, opacity 1.5s;
+  transition: transform 1s ease-in-out, opacity 1s;
 }
 
 /* —— 第二层级：社交图标容器 —— */
 .menu-icons {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 18px + 40px);
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 80px);
   right: 5vw;               /* 与 Visit 按钮右对齐 */
   display: flex;
   flex-direction: column;
   justify-content: space-between;  /* 五个图标上下均分 */
-  height: 320px;                   /* 与 .menu-line 一致 */
   pointer-events: none;            /* 初始不拦截点击，打开后图标本身会接收 */
 }
 
@@ -301,6 +299,6 @@ body {
 #buttons.closing .menu-icon {
   opacity: 0;
   transform: translateY(-20px);
-  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+  transition: opacity 1s ease-in, transform 1s ease-in;
 }
 
