@@ -211,6 +211,7 @@ body {
   display: flex;
   justify-content: space-between;  /* 第一层级按钮左右分布 */
   align-items: center;
+  gap: 5vw;
   z-index: 3;
 
   /* 只让子元素响应点击 */
@@ -227,6 +228,8 @@ body {
 /* —— 主按钮（Visit），不再 absolute —— */
 .btn.menu-toggle {
   /* static 定位，由上面的 flex 布局自动放到最右 */
+  width: 80px;
+  height: 80px;
   background: url("assets/button-visit.png") no-repeat center/contain;
   border: none;
   padding: 0;
