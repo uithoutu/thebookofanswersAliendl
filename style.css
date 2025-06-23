@@ -249,7 +249,7 @@ body {
 /* —— 第二层级：菜单连线 —— */
 .menu-line {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 18px + 60px);
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 61px);
   right: 8.2vw;               /* 与 Visit 按钮右对齐 */
   width: auto;
   height: 300px;            /* 线条总长度 */
