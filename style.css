@@ -317,6 +317,6 @@ body {
 #buttons.closing .menu-icon {
   opacity: 0;
   transform: translateY(-20px);
-  transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+  transition: opacity 1s ease-in, transform 1s ease-in;
 }
 
