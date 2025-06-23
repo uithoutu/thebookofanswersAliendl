@@ -250,7 +250,7 @@ body {
 .menu-line {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 60px);
-  right: 7.9vw;               /* 与 Visit 按钮右对齐 */
+  right: 8.1vw;               /* 与 Visit 按钮右对齐 */
   width: auto;
   height: 320px;            /* 线条总长度 */
   transform: scaleY(0);
@@ -262,41 +262,40 @@ body {
 /* —— 第二层级：社交图标容器 —— */
 .menu-icons {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 18px + 75px);
-  right: 3.8vw;               /* 与 Visit 按钮右对齐 */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;  /* 五个图标上下均分 */
-  pointer-events: none;            /* 初始不拦截点击，打开后图标本身会接收 */
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 78px);
+  right: 3.9vw;
+  width: 50px;    /* 和 visit 按钮一样宽 */
+  height: auto;  /* 和 menu-line 一致 */
+  pointer-events: none;
 }
 
-/* —— 各个社交图标 —— */
+/* 图标绝对定位，各自斜上排列 */
+.menu-icons a {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* 比如 5 个图标，间隔 64px（320/4） */
+.menu-icons a:nth-child(1) { bottom: calc(320px * 4/4); }
+.menu-icons a:nth-child(2) { bottom: calc(320px * 3/4); }
+.menu-icons a:nth-child(3) { bottom: calc(320px * 2/4); }
+.menu-icons a:nth-child(4) { bottom: calc(320px * 1/4); }
+.menu-icons a:nth-child(5) { bottom: 0; }
+
+/* 初始隐藏，向上平移 20px */
 .menu-icon {
-  width: 50px;
-  height: auto;
+  width: 50px; height: auto;
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  pointer-events: auto;  /* 图标本身可点击 */
+  pointer-events: auto;
 }
 
-/* —— 打开状态 —— */
-#buttons.open .menu-line {
-  transform: scaleY(1);
-  opacity: 1;
-}
-
-/* 让每个图标不仅延迟，还真正从透明变成可见 */
-#buttons.open .menu-icons a:nth-child(1) .menu-icon,
-#buttons.open .menu-icons a:nth-child(2) .menu-icon,
-#buttons.open .menu-icons a:nth-child(3) .menu-icon,
-#buttons.open .menu-icons a:nth-child(4) .menu-icon,
-#buttons.open .menu-icons a:nth-child(5) .menu-icon {
+/* 打开时依次淡入回位 */
+#buttons.open .menu-icon {
   opacity: 1;
   transform: translateY(0);
 }
-
-/* 然后依旧保留你之前为每个图标设置的 transition-delay */
 #buttons.open .menu-icons a:nth-child(1) .menu-icon { transition-delay: 0.2s; }
 #buttons.open .menu-icons a:nth-child(2) .menu-icon { transition-delay: 0.4s; }
 #buttons.open .menu-icons a:nth-child(3) .menu-icon { transition-delay: 0.6s; }
