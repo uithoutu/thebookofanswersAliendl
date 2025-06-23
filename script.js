@@ -265,7 +265,12 @@ async function downloadCurrent() {
 ;(function setupSocialMenu() {
   const menuToggle = document.getElementById('visit-button');
   const container  = document.getElementById('buttons');
-  const DURATION   = 1000; // 收起动画时长，和 CSS 一致
+  const DURATION   = 1000; // 和 CSS .closing transition-duration 保持一致
+
+  if (!menuToggle || !container) {
+    console.error('[setupSocialMenu] 找不到 #visit-button 或 #buttons');
+    return;
+  }
 
   menuToggle.addEventListener('click', () => {
     if (container.classList.contains('open')) {
