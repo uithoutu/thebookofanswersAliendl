@@ -276,10 +276,10 @@ body {
   transform: translateX(-50%);
 }
 /* 比如 5 个图标，间隔 64px（320/4） */
-.menu-icons a:nth-child(1) { bottom: calc(320px * 4/4); }
-.menu-icons a:nth-child(2) { bottom: calc(320px * 3/4); }
-.menu-icons a:nth-child(3) { bottom: calc(320px * 2/4); }
-.menu-icons a:nth-child(4) { bottom: calc(320px * 1/4); }
+.menu-icons a:nth-child(1) { bottom: calc(240px * 4/4); }
+.menu-icons a:nth-child(2) { bottom: calc(240px * 3/4); }
+.menu-icons a:nth-child(3) { bottom: calc(240px * 2/4); }
+.menu-icons a:nth-child(4) { bottom: calc(240px * 1/4); }
 .menu-icons a:nth-child(5) { bottom: 0; }
 
 /* 初始隐藏，向上平移 20px */
@@ -296,11 +296,11 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
-#buttons.open .menu-icons a:nth-child(1) .menu-icon { transition-delay: 0.2s; }
-#buttons.open .menu-icons a:nth-child(2) .menu-icon { transition-delay: 0.4s; }
+#buttons.open .menu-icons a:nth-child(5) .menu-icon { transition-delay: 0.2s; }
+#buttons.open .menu-icons a:nth-child(4) .menu-icon { transition-delay: 0.4s; }
 #buttons.open .menu-icons a:nth-child(3) .menu-icon { transition-delay: 0.6s; }
-#buttons.open .menu-icons a:nth-child(4) .menu-icon { transition-delay: 0.8s; }
-#buttons.open .menu-icons a:nth-child(5) .menu-icon { transition-delay: 1.0s; }
+#buttons.open .menu-icons a:nth-child(2) .menu-icon { transition-delay: 0.8s; }
+#buttons.open .menu-icons a:nth-child(1) .menu-icon { transition-delay: 1.0s; }
 
 /* —— 关闭状态 —— */
 #buttons.closing .menu-line {
