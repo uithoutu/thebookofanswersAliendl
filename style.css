@@ -249,21 +249,21 @@ body {
 /* —— 第二层级：菜单连线 —— */
 .menu-line {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 18px + 80px);
-  right: 9vw;               /* 与 Visit 按钮右对齐 */
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 60px);
+  right: 8vw;               /* 与 Visit 按钮右对齐 */
   width: auto;
   height: 320px;            /* 线条总长度 */
   transform: scaleY(0);
   transform-origin: bottom center;
   opacity: 0;
-  transition: transform 1s ease-in-out, opacity 1s;
+  transition: transform 0.8s ease-in-out, opacity 0.5s;
 }
 
 /* —— 第二层级：社交图标容器 —— */
 .menu-icons {
   position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 18px + 80px);
-  right: 5vw;               /* 与 Visit 按钮右对齐 */
+  bottom: calc(env(safe-area-inset-bottom) + 18px + 70px);
+  right: 3.5vw;               /* 与 Visit 按钮右对齐 */
   display: flex;
   flex-direction: column;
   justify-content: space-between;  /* 五个图标上下均分 */
