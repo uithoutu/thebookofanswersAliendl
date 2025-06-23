@@ -263,7 +263,7 @@ body {
 .menu-icons {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 75px);
-  right: 3.8vw;
+  right: 3.7vw;
   width: 50px;    /* 和 visit 按钮一样宽 */
   height: auto;  /* 和 menu-line 一致 */
   pointer-events: none;
