@@ -225,18 +225,26 @@ body {
   pointer-events: auto;  /* 恢复按钮本身的点击 */
 }
 
-/* —— 主按钮（Visit），不再 absolute —— */
-.btn.menu-toggle {
-  /* static 定位，由上面的 flex 布局自动放到最右 */
-  width: 80px;
-  height: 80px;
-  background: url("assets/button-visit.png") no-repeat center/contain;
+/* 按钮本体，去掉背景、内边距 */
+#visit-button {
+  background: none;
   border: none;
   padding: 0;
-  cursor: pointer;
 }
-.btn.menu-toggle.pressed {
-  background-image: url("assets/button-visit-pressed.png");
+
+/* 里面的 img */
+#visit-button-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  cursor: pointer;      /* 小手提示 */
+}
+
+/* 按下态（JS 会自动给 <img> 加上 .pressed） */
+#visit-button-img.pressed {
+  /* JS 切 src 就够了，如果你要用 CSS：
+  content: url("assets/button-visit-pressed.png");
+  */
 }
 
 /* —— 第二层级：菜单连线 —— */
