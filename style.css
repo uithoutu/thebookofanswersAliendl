@@ -251,8 +251,8 @@ body {
 .menu-line {
   position: absolute;
   bottom: calc(env(safe-area-inset-bottom) + 18px + 40px);
-  right: 5vw;               /* 与 Visit 按钮右对齐 */
-  width: 1px;
+  right: 9vw;               /* 与 Visit 按钮右对齐 */
+  width: auto;
   height: 320px;            /* 线条总长度 */
   transform: scaleY(0);
   transform-origin: bottom center;
@@ -274,8 +274,8 @@ body {
 
 /* —— 各个社交图标 —— */
 .menu-icon {
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: auto;
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
